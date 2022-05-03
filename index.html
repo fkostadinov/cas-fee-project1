@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <link href="./assets/style.css" rel="stylesheet">
+    <title>Todo App</title>
+</head>
+<body>
+
+    <head></head>
+
+    <main>
+        <div class="todo-control-btns">
+            <button class="btn">Create new Todo</button>
+            <button class="btn">Toggle Style</button>
+        </div>
+        <div>
+            <div class="todo-list-container">
+                <div class="todo-list-sort-btns">
+                    <button class="btn">Name</button>
+                    <button class="btn">By Due Date</button>
+                    <button class="btn">By Creation Date</button>
+                    <button class="btn">By Importance</button>
+                    <button class="btn">Filter Completed</button>
+                </div>
+                <ul class="todo-list-ul">
+                    <li class="todo-list-item">
+                        <div class="todo-list-item-box">
+                            <div class="todo-item-due-date">in a day</div>
+                            <div class="todo-item-title">Geburi von Sarah</div>
+                            <div class="todo-item-importance">5</div>
+                            <div class="todo-item-description">Anrufen</div>
+                            <input type="checkbox" id="todo-item-isdone">
+                            <button class="btn">Edit</button>
+                        </div>
+                    </li>
+                    <li class="todo-list-item">
+                        <div class="todo-list-item-box">
+                            <div class="todo-item-due-date">in 7 days</div>
+                            <div class="todo-item-title">Ferien</div>
+                            <div class="todo-item-importance">3</div>
+                            <div class="todo-item-description">Flug buchen</div>
+                            <input type="checkbox" id="todo-item-isdone">
+                            <button class="btn">Edit</button>
+                        </div>                         
+                    </li>
+                    <li class="todo-list-item">
+                        <div class="todo-list-item-box">
+                            <div class="todo-item-due-date">a day ago</div>
+                            <div class="todo-item-title">Einkaufen</div>
+                            <div class="todo-item-importance">1</div>
+                            <div class="todo-item-description">Pizza Schuhe Kekse</div>
+                            <input type="checkbox" id="todo-item-isdone">
+                            <button class="btn">Edit</button>
+                        </div>                        
+                    </li>
+                </ul>
+            </div>
+            <div class="todo-form-container">
+                <form>
+                    <div class="todo-form-inputs">
+                        <div class="todo-form-lbl">
+                            <label>Title</label>
+                        </div>
+                        <input type="text">
+
+                        <div class="todo-form-lbl">
+                            <label>Importance</label>
+                        </div>
+                        <input type="text">
+
+                        <div class="todo-form-lbl">
+                            <label>Due Date</label>
+                        </div>
+                        <input type="date">
+
+                        <input type="checkbox" id="todo-form-isdone" value="Finished">
+                        <label for="todo-form-isdone">Finished</label>
+
+                        <div class="todo-form-lbl">
+                            <label>Description</label>
+                        </div>
+                        <input type="text">
+                    </div>
+                    <div class="todo-form-btns">
+                        <button class="btn">Update</button>
+                        <button class="btn">Update & Overview</button>
+                        <button class="btn">Overview</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer></footer>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.btn {
+    color: #EEEEEE;
+    background-color: #4169E1;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.todo-control-btns {
+    margin-bottom: 14px;
+}
+
+.todo-list-item-box {
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: #111111;
+}
