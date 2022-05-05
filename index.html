@@ -23,64 +23,82 @@
                     <button class="btn">By Importance</button>
                     <button class="btn">Filter Completed</button>
                 </div>
-                <ul class="todo-list-ul">
+                <ol class="todo-list-ol">
                     <li class="todo-list-item">
-                        <div class="todo-list-item-box">
+                        <div class="todo-list-item-container">
                             <div class="todo-item-due-date">in a day</div>
                             <div class="todo-item-title">Geburi von Sarah</div>
                             <div class="todo-item-importance">5</div>
                             <div class="todo-item-description">Anrufen</div>
-                            <input type="checkbox" id="todo-item-isdone">
-                            <button class="btn">Edit</button>
+                            <div class="todo-item-isdone">
+                                <input type="checkbox" id="todo-item-isdone-1">
+                                <label class="todo-item-checkbox-lbl" for="todo-item-isdone-1">Completed</label>
+                            </div>
+                            <div class="todo-item-btn">
+                                <button class="btn">Edit</button>
+                            </div>
                         </div>
                     </li>
                     <li class="todo-list-item">
-                        <div class="todo-list-item-box">
+                        <div class="todo-list-item-container">
                             <div class="todo-item-due-date">in 7 days</div>
                             <div class="todo-item-title">Ferien</div>
                             <div class="todo-item-importance">3</div>
                             <div class="todo-item-description">Flug buchen</div>
-                            <input type="checkbox" id="todo-item-isdone">
-                            <button class="btn">Edit</button>
+                            <div class="todo-item-isdone">
+                                <input type="checkbox" id="todo-item-isdone-2">
+                                <label class="todo-item-checkbox-lbl" for="todo-item-isdone-2">Completed</label>
+                            </div>
+                            <div class="todo-item-btn">
+                                <button class="btn">Edit</button>
+                            </div>
                         </div>                         
                     </li>
                     <li class="todo-list-item">
-                        <div class="todo-list-item-box">
+                        <div class="todo-list-item-container">
                             <div class="todo-item-due-date">a day ago</div>
                             <div class="todo-item-title">Einkaufen</div>
                             <div class="todo-item-importance">1</div>
                             <div class="todo-item-description">Pizza Schuhe Kekse</div>
-                            <input type="checkbox" id="todo-item-isdone">
-                            <button class="btn">Edit</button>
+                            <div class="todo-item-isdone">
+                                <input type="checkbox" id="todo-item-isdone-3">
+                                <label class="todo-item-checkbox-lbl" for="todo-item-isdone-3">Completed</label>
+                            </div>
+                            <div class="todo-item-btn">
+                                <button class="btn">Edit</button>
+                            </div>
                         </div>                        
                     </li>
-                </ul>
+                </ol>
             </div>
             <div class="todo-form-container">
                 <form>
                     <div class="todo-form-inputs">
-                        <div class="todo-form-lbl">
-                            <label>Title</label>
+                        <div class="todo-form-item">
+                            <label class="todo-form-item-lbl" for="todo-input-title">Title</label>
+                            <input type="text" id="todo-input-title">
                         </div>
-                        <input type="text">
-
-                        <div class="todo-form-lbl">
-                            <label>Importance</label>
+                        
+                        <div class="todo-form-item">
+                            <label class="todo-form-item-lbl" for="todo-input-importance">Importance</label>
+                            <input type="text" id="todo-input-importance">
                         </div>
-                        <input type="text">
-
-                        <div class="todo-form-lbl">
-                            <label>Due Date</label>
+                        
+                        <div class="todo-form-item">
+                            <label class="todo-form-item-lbl" for="todo-input-duedate">Due Date</label>
+                            <input type="date" id="todo-input-duedate">
                         </div>
-                        <input type="date">
-
-                        <input type="checkbox" id="todo-form-isdone" value="Finished">
-                        <label for="todo-form-isdone">Finished</label>
-
-                        <div class="todo-form-lbl">
-                            <label>Description</label>
+                    
+                        <div class="todo-form-item">
+                            <input type="checkbox" id="todo-form-isdone" value="Finished">
+                            <label class="todo-form-checkbox-lbl" for="todo-form-isdone">Finished</label>
                         </div>
-                        <input type="text">
+
+                        <div class="todo-form-item">
+                            <label class="todo-form-item-lbl" for="todo-input-description">Description</label>
+                            <textarea id="todo-input-description" rows="6"></textarea>
+                        </div>
+                        
                     </div>
                     <div class="todo-form-btns">
                         <button class="btn">Update</button>

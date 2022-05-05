@@ -14,8 +14,74 @@ body {
     margin-bottom: 14px;
 }
 
-.todo-list-item-box {
+.todo-list-ol {
+    padding-left: 0px;
+}
+
+.todo-list-ol > .todo-list-item {
+    list-style: none;
+}
+
+.todo-list-item-container {
+    display: grid;
+    grid-template-columns: 20% 60% 10% 10%;
+
     border-style: solid;
     border-width: 0px 0px 1px 0px;
     border-color: #111111;
+    margin-bottom: 12px;
+}
+
+.todo-item-due-date {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.todo-item-title {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.todo-item-importance {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.todo-item-isdone {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.todo-item-description {
+    grid-column: 2 / span 2;
+    grid-row: 2;
+}
+
+.todo-item-btn {
+    grid-column: 4;
+    grid-row: 1 / span 2;
+}
+
+.todo-form-item {
+    margin-bottom: 12px;
+}
+
+.todo-form-item-lbl {
+    display:block;
+}
+
+.todo-form-checkbox-lbl {
+    display: inline;
+}
+
+.todo-form-item input[type="text"] {
+    width: 100%;
+}
+
+.todo-form-item textarea {
+    width: 100%;
+}
+
+.todo-form-item input[type="date"] {
+    width: 100%;
 }
