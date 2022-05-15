@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
     <link href="./assets/style.css" rel="stylesheet">
+
     <title>Todo App</title>
 </head>
+
 <body>
+    <div class="base-container">
 
-    <head></head>
+        <head></head>
 
-    <main>
-        <div class="todo-control-btns">
-            <button class="btn">Create new Todo</button>
-            <button class="btn">Toggle Style</button>
-        </div>
-        <div>
-            <div class="todo-list-container">
-                <div class="todo-list-sort-btns">
-                    <button class="btn">Name</button>
-                    <button class="btn">By Due Date</button>
-                    <button class="btn">By Creation Date</button>
-                    <button class="btn">By Importance</button>
-                    <button class="btn">Filter Completed</button>
+        <main>
+            <div class="todo-control-btns-container">
+                <button class="btn">Create new Todo</button>
+                <button class="btn">Toggle Style</button>
+            </div>
+
+            <div>
+                <div class="todo-list-sort-btns-container">
+                    <div>
+                        <!-- flex align left -->
+                        <button class="btn">Name</button>
+                        <button class="btn">By Due Date</button>
+                        <button class="btn">By Creation Date</button>
+                        <button class="btn">By Importance</button>
+                    </div>
+                    <div>
+                        <!-- flex align right -->
+                        <button class="btn">Filter Completed</button>
+                    </div>
                 </div>
                 <ol class="todo-list-ol">
                     <li class="todo-list-item">
@@ -38,6 +54,7 @@
                                 <button class="btn">Edit</button>
                             </div>
                         </div>
+                        <hr>
                     </li>
                     <li class="todo-list-item">
                         <div class="todo-list-item-container">
@@ -52,7 +69,8 @@
                             <div class="todo-item-btn">
                                 <button class="btn">Edit</button>
                             </div>
-                        </div>                         
+                        </div>
+                        <hr>
                     </li>
                     <li class="todo-list-item">
                         <div class="todo-list-item-container">
@@ -67,28 +85,28 @@
                             <div class="todo-item-btn">
                                 <button class="btn">Edit</button>
                             </div>
-                        </div>                        
+                        </div>
+                        <hr>
                     </li>
                 </ol>
-            </div>
-            <div class="todo-form-container">
-                <form>
+
+                <form class="todo-form-container">
                     <div class="todo-form-inputs">
                         <div class="todo-form-item">
                             <label class="todo-form-item-lbl" for="todo-input-title">Title</label>
                             <input type="text" id="todo-input-title">
                         </div>
-                        
+
                         <div class="todo-form-item">
                             <label class="todo-form-item-lbl" for="todo-input-importance">Importance</label>
                             <input type="text" id="todo-input-importance">
                         </div>
-                        
+
                         <div class="todo-form-item">
                             <label class="todo-form-item-lbl" for="todo-input-duedate">Due Date</label>
                             <input type="date" id="todo-input-duedate">
                         </div>
-                    
+
                         <div class="todo-form-item">
                             <input type="checkbox" id="todo-form-isdone" value="Finished">
                             <label class="todo-form-checkbox-lbl" for="todo-form-isdone">Finished</label>
@@ -98,7 +116,7 @@
                             <label class="todo-form-item-lbl" for="todo-input-description">Description</label>
                             <textarea id="todo-input-description" rows="6"></textarea>
                         </div>
-                        
+
                     </div>
                     <div class="todo-form-btns">
                         <button class="btn">Update</button>
@@ -107,10 +125,11 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <footer></footer>
+        <footer></footer>
 
+    </div>
 </body>
+
 </html>

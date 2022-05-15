@@ -1,35 +1,64 @@
+/* CSS */
+:root {
+    --color-white: #FFFFFF;
+    --color-black: #000000;
+    --color-near-white: #FEFEFE;
+    --color-near-black: #161616;
+    --color-dark-gray: #414141;
+    --color-navy-blue: #4169E1;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', sans-serif;
+    color: var(--color-black);
+    background-color: var(--color-near-white);
+}
+
+body > .base-container {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .btn {
-    color: #EEEEEE;
-    background-color: #4169E1;
+    color: var(--color-near-white);
+    background-color: var(--color-navy-blue);
     border: none;
     border-radius: 4px;
     padding: 12px;
 }
 
-.todo-control-btns {
+.todo-control-btns-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
     margin-bottom: 14px;
 }
 
+.todo-list-sort-btns-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+
+/* ----- List of Todo items ------ */
 .todo-list-ol {
-    padding-left: 0px;
+    padding-left: 0px; /* Remove browswer default padding */
 }
 
 .todo-list-ol > .todo-list-item {
     list-style: none;
 }
 
+.todo-list-item {
+    margin-bottom: 12px;
+}
+
 .todo-list-item-container {
     display: grid;
     grid-template-columns: 20% 60% 10% 10%;
-
-    border-style: solid;
-    border-width: 0px 0px 1px 0px;
-    border-color: #111111;
-    margin-bottom: 12px;
 }
 
 .todo-item-due-date {
@@ -62,16 +91,16 @@ body {
     grid-row: 1 / span 2;
 }
 
+
+/* ----- Form of a single Todo ----- */
+.todo-form-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
 .todo-form-item {
     margin-bottom: 12px;
-}
-
-.todo-form-item-lbl {
-    display:block;
-}
-
-.todo-form-checkbox-lbl {
-    display: inline;
 }
 
 .todo-form-item input[type="text"] {
