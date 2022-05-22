@@ -9,7 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
-    <link href="./assets/style.css" rel="stylesheet">
+    <link href="./assets/css/style.css" rel="stylesheet">
+
+    <script src="./assets/js/todomodel.js"></script>
 
     <title>Todo App</title>
 </head>
@@ -29,65 +31,18 @@
                 <div class="todo-list-sort-btns-container">
                     <div>
                         <!-- flex align left -->
-                        <button class="btn">Name</button>
-                        <button class="btn">By Due Date</button>
-                        <button class="btn">By Creation Date</button>
-                        <button class="btn">By Importance</button>
+                        <button class="btn" id="btn-sort-by-title">Title</button>
+                        <button class="btn" id="btn-sort-by-duedate">By Due Date</button>
+                        <button class="btn" id="btn-sort-by-creationdate">By Creation Date</button>
+                        <button class="btn" id="btn-sort-by-importance">By Importance</button>
                     </div>
                     <div>
                         <!-- flex align right -->
                         <button class="btn">Filter Completed</button>
                     </div>
                 </div>
-                <ol class="todo-list-ol">
-                    <li class="todo-list-item">
-                        <div class="todo-list-item-container">
-                            <div class="todo-item-due-date">in a day</div>
-                            <div class="todo-item-title">Geburi von Sarah</div>
-                            <div class="todo-item-importance">5</div>
-                            <div class="todo-item-description">Anrufen</div>
-                            <div class="todo-item-isdone">
-                                <input type="checkbox" id="todo-item-isdone-1">
-                                <label class="todo-item-checkbox-lbl" for="todo-item-isdone-1">Completed</label>
-                            </div>
-                            <div class="todo-item-btn">
-                                <button class="btn">Edit</button>
-                            </div>
-                        </div>
-                        <hr>
-                    </li>
-                    <li class="todo-list-item">
-                        <div class="todo-list-item-container">
-                            <div class="todo-item-due-date">in 7 days</div>
-                            <div class="todo-item-title">Ferien</div>
-                            <div class="todo-item-importance">3</div>
-                            <div class="todo-item-description">Flug buchen</div>
-                            <div class="todo-item-isdone">
-                                <input type="checkbox" id="todo-item-isdone-2">
-                                <label class="todo-item-checkbox-lbl" for="todo-item-isdone-2">Completed</label>
-                            </div>
-                            <div class="todo-item-btn">
-                                <button class="btn">Edit</button>
-                            </div>
-                        </div>
-                        <hr>
-                    </li>
-                    <li class="todo-list-item">
-                        <div class="todo-list-item-container">
-                            <div class="todo-item-due-date">a day ago</div>
-                            <div class="todo-item-title">Einkaufen</div>
-                            <div class="todo-item-importance">1</div>
-                            <div class="todo-item-description">Pizza Schuhe Kekse</div>
-                            <div class="todo-item-isdone">
-                                <input type="checkbox" id="todo-item-isdone-3">
-                                <label class="todo-item-checkbox-lbl" for="todo-item-isdone-3">Completed</label>
-                            </div>
-                            <div class="todo-item-btn">
-                                <button class="btn">Edit</button>
-                            </div>
-                        </div>
-                        <hr>
-                    </li>
+                <ol class="todo-list-ol" id="todos">
+                    <!-- Todo items -->
                 </ol>
 
                 <form class="todo-form-container">
@@ -128,6 +83,9 @@
         </main>
 
         <footer></footer>
+
+        <!-- Can only be executed once the list element with id #todos has been rendered. -->
+        <script src="./assets/js/todocontroller.js"></script>
 
     </div>
 </body>
