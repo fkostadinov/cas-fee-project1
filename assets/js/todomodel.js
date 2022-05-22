@@ -1,9 +1,3 @@
-/*
-window.addEventListener("load", function(event) {
-    this.alert("Document load was called!");
-});
-*/
-
 const todos = [
     {id: '1', creationdate: "1975-01-01", duedate: '2022-05-24', title: "Fräsen fräsen", importance: 1, description: "Fräsen müssten mal wieder gefräst werden.", isdone: false},
     {id: '3', creationdate: "1981-01-12", duedate: '1999-12-31', title: "Weltfrieden", importance: 5, description: "Make love, not war.", isdone: false},
@@ -13,16 +7,20 @@ const todos = [
 ];
 
 
-function sortTodos(compareFunction) {
-    return [...todos].sort(compareFunction);
+function filterTodosByCompletion(_todos) {
+    return _todos.filter(todo => todo.isdone === false);
+}
+
+function sortTodos(_todos, compareFunction) {
+    return [..._todos].sort(compareFunction);
 }
 
 
 function compareTodosByTitle(todo1, todo2) {
     return todo1.title.localeCompare(todo2.title);
 }
-function sortTodosByTitle() {
-    return sortTodos(compareTodosByTitle);
+function sortTodosByTitle(_todos) {
+    return sortTodos(_todos, compareTodosByTitle);
 }
 
 
@@ -31,8 +29,8 @@ function compareTodosByDueDate(todo1, todo2) {
     let date2 = Date.parse(todo2.duedate);
     return date1 - date2;
 }
-function sortTodosByDueDate() {
-    return sortTodos(compareTodosByDueDate);
+function sortTodosByDueDate(_todos) {
+    return sortTodos(_todos, compareTodosByDueDate);
 }
 
 
@@ -41,8 +39,8 @@ function compareTodosByCreationDate(todo1, todo2) {
     let date2 = Date.parse(todo2.creationdate);
     return date1 - date2;
 }
-function sortTodosByCreationDate() {
-    return sortTodos(compareTodosByCreationDate);
+function sortTodosByCreationDate(_todos) {
+    return sortTodos(_todos, compareTodosByCreationDate);
 }
 
 
@@ -50,8 +48,8 @@ function compareTodosByImportance(todo1, todo2) {
     let delta = todo1.importance - todo2.importance;
     return delta * -1;
 }
-function sortTodosByImportance() {
-    return sortTodos(compareTodosByImportance);
+function sortTodosByImportance(_todos) {
+    return sortTodos(_todos, compareTodosByImportance);
 }
 
 
