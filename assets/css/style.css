@@ -35,7 +35,7 @@ body > .base-container {
     margin-bottom: 14px;
 }
 
-.todo-list-sort-btns-container {
+.todo-list-btns-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

@@ -16,40 +16,57 @@ function sortTodos(_todos, compareFunction) {
 }
 
 
-function compareTodosByTitle(todo1, todo2) {
+function compareTodosByTitleAsc(todo1, todo2) {
     return todo1.title.localeCompare(todo2.title);
 }
-function sortTodosByTitle(_todos) {
-    return sortTodos(_todos, compareTodosByTitle);
+function compareTodosByTitleDesc(todo1, todo2) {
+    return todo2.title.localeCompare(todo1.title);
+}
+function sortTodosByTitle(_todos, sortOrder) {
+    return sortOrder === "ascending" ? sortTodos(_todos, compareTodosByTitleAsc) : sortTodos(_todos, compareTodosByTitleDesc);
 }
 
 
-function compareTodosByDueDate(todo1, todo2) {
+function compareTodosByDueDateAsc(todo1, todo2) {
     let date1 = Date.parse(todo1.duedate);
     let date2 = Date.parse(todo2.duedate);
     return date1 - date2;
 }
-function sortTodosByDueDate(_todos) {
-    return sortTodos(_todos, compareTodosByDueDate);
+function compareTodosByDueDateDesc(todo1, todo2) {
+    let date1 = Date.parse(todo1.duedate);
+    let date2 = Date.parse(todo2.duedate);
+    return date2 - date1;
+}
+function sortTodosByDueDate(_todos, sortOrder) {
+    return sortOrder === "ascending" ? sortTodos(_todos, compareTodosByDueDateAsc) : sortTodos(_todos, compareTodosByDueDateDesc);
 }
 
 
-function compareTodosByCreationDate(todo1, todo2) {
+function compareTodosByCreationDateAsc(todo1, todo2) {
     let date1 = Date.parse(todo1.creationdate);
     let date2 = Date.parse(todo2.creationdate);
     return date1 - date2;
 }
-function sortTodosByCreationDate(_todos) {
-    return sortTodos(_todos, compareTodosByCreationDate);
+function compareTodosByCreationDateDesc(todo1, todo2) {
+    let date1 = Date.parse(todo1.creationdate);
+    let date2 = Date.parse(todo2.creationdate);
+    return date2 - date1;
+}
+function sortTodosByCreationDate(_todos, sortOrder) {
+    return sortOrder === "ascending" ? sortTodos(_todos, compareTodosByCreationDateAsc) : sortTodos(_todos, compareTodosByCreationDateDesc);
 }
 
 
-function compareTodosByImportance(todo1, todo2) {
+function compareTodosByImportanceAsc(todo1, todo2) {
     let delta = todo1.importance - todo2.importance;
-    return delta * -1;
+    return delta;
 }
-function sortTodosByImportance(_todos) {
-    return sortTodos(_todos, compareTodosByImportance);
+function compareTodosByImportanceDesc(todo1, todo2) {
+    let delta = todo2.importance - todo1.importance;
+    return delta;
+}
+function sortTodosByImportance(_todos, sortOrder) {
+    return sortOrder === "ascending" ? sortTodos(_todos, compareTodosByImportanceAsc) : sortTodos(_todos, compareTodosByImportanceDesc);
 }
 
 
