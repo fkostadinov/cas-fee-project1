@@ -7,8 +7,36 @@ import todos from ".todomodel.js";
 
 /* ------------------ Sorting & Filtering -------------------- */
 
-class SortingController {
+class FilterController {
     constructor() {
+        this.isActive = false;
+    }
+
+    // Event handler for filter button
+    handleTodoFiltering(event) {
+        // Toggle filter activity state
+        this.isActive = !this.isActive;
+        let filteredTodos = todos;
+        if (this.isActive) {
+            filteredTodos = filterTodosByCompletion(todos);
+        }
+        let todosHtml = createTodosHtml(filteredTodos);
+        renderTodosWithHtml(todosHtml);
+    }
+
+    attachFilterButtonEventHandlers() {
+        document.querySelector("#btn-filter-by-completion").addEventListener("click", this.handleTodoFiltering.bind(this));
+    }
+}
+const filter = new FilterController();
+filter.attachFilterButtonEventHandlers();
+
+
+
+class SortingController {
+    constructor(filter) {
+        this.filter = filter;
+
         this.buttonSortByTitle = document.querySelector("#btn-sort-by-title");
         this.buttonSortByDueDate = document.querySelector("#btn-sort-by-duedate");
         this.buttonSortByCreationDate = document.querySelector("#btn-sort-by-creationdate");
@@ -52,7 +80,7 @@ class SortingController {
 
         // Check if filtering is applied currently. If so, only render those elements
         // that are not filtered out.
-        if (filter.isActive) {
+        if (this.filter.isActive) {
             sortedTodos = filterTodosByCompletion(sortedTodos);
         }  
         
@@ -67,34 +95,8 @@ class SortingController {
         this.buttonSortByImportance.addEventListener("click", this.handleSorting.bind(this));
     }
 }
-const sorter = new SortingController();
+const sorter = new SortingController(filter);
 sorter.attachSortButtonEventHandlers();
-
-
-
-class FilterController {
-    constructor() {
-        this.isActive = false;
-    }
-
-    // Event handler for filter button
-    handleTodoFiltering(event) {
-        // Toggle filter activity state
-        this.isActive = !this.isActive;
-        let filteredTodos = todos;
-        if (this.isActive) {
-            filteredTodos = filterTodosByCompletion(todos);
-        }
-        let todosHtml = createTodosHtml(filteredTodos);
-        renderTodosWithHtml(todosHtml);
-    }
-
-    attachFilterButtonEventHandlers() {
-        document.querySelector("#btn-filter-by-completion").addEventListener("click", this.handleTodoFiltering.bind(this));
-    }
-}
-const filter = new FilterController();
-filter.attachFilterButtonEventHandlers();
 
 
 
