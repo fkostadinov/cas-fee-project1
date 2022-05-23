@@ -7,119 +7,96 @@ import todos from ".todomodel.js";
 
 /* ------------------ Sorting & Filtering -------------------- */
 
-function attachSortButtonEventHandlers() {
-    const buttonSortByTitle = document.querySelector("#btn-sort-by-title");
-    const buttonSortByDueDate = document.querySelector("#btn-sort-by-duedate");
-    const buttonSortByCreationDate = document.querySelector("#btn-sort-by-creationdate");
-    const buttonSortByImportance = document.querySelector("#btn-sort-by-importance");
-    const sortButtonList = [buttonSortByTitle, buttonSortByDueDate, buttonSortByCreationDate, buttonSortByImportance];
+class SortingController {
+    constructor() {
+        this.buttonSortByTitle = document.querySelector("#btn-sort-by-title");
+        this.buttonSortByDueDate = document.querySelector("#btn-sort-by-duedate");
+        this.buttonSortByCreationDate = document.querySelector("#btn-sort-by-creationdate");
+        this.buttonSortByImportance = document.querySelector("#btn-sort-by-importance");
+        //const sortButtonList = [buttonSortByTitle, buttonSortByDueDate, buttonSortByCreationDate, buttonSortByImportance];
 
-    const handleTodoSorting = function(event) {
+        this.activeSorter = undefined;
+        this.isAscending = true; // true: ascending, false: descending
+    }
+
+    // Event handler for sorting buttons
+    handleSorting(event) {
         const button = event.target;
-        
-        const parentEl = event.target.parentElement; // id: todo-list-sort-btns
-        let oldSortButtonId = undefined;
 
-        if (parentEl.hasAttribute("data-active-sort-btn-by-id")) {
-            oldSortButtonId = parentEl.getAttribute("data-active-sort-btn-by-id");
+        // If previous sorter is same as new one, just toggle the sort order
+        if (!(this.activeSorter === undefined) && this.activeSorter.id === button.id) {
+            this.isAscending = !this.isAscending;
         }
 
-        // Set the new active sort button as an attribute
-        parentEl.setAttribute("data-active-sort-btn-by-id", button.id);
+        this.activeSorter = button;
+        let sortOrder = this.isAscending ? "ascending" : "descending";
+        let sortedTodos = todos;
 
-        let newSortOrder = undefined;
-        if (oldSortButtonId === button.id) {
-            // Toggle sort order as same button was pressed as already active
-            let oldSortOrder = parentEl.getAttribute("data-active-sort-order");
-            newSortOrder = oldSortOrder === "ascending" ? "descending" : "ascending";
-        }
-        else {
-            // TODO: Here we could potentially have dedicated default sort orders for
-            // each type of button. In another life, maybe...
-            newSortOrder = "ascending";
-        }
-        parentEl.setAttribute("data-active-sort-order", newSortOrder);
-
-
-        let sortedTodos = undefined;
         switch(button.id) {
             case "btn-sort-by-title":
-                sortedTodos = sortTodosByTitle(todos, newSortOrder);
+                sortedTodos = sortTodosByTitle(todos, sortOrder);
             break;
     
             case "btn-sort-by-duedate":
-                sortedTodos = sortTodosByDueDate(todos, newSortOrder);
+                sortedTodos = sortTodosByDueDate(todos, sortOrder);
             break;
     
             case "btn-sort-by-creationdate":
-                sortedTodos = sortTodosByCreationDate(todos, newSortOrder);
+                sortedTodos = sortTodosByCreationDate(todos, sortOrder);
             break;
     
             case "btn-sort-by-importance":
-                sortedTodos = sortTodosByImportance(todos, newSortOrder);
+                sortedTodos = sortTodosByImportance(todos, sortOrder);
             break;
         }
 
         // Check if filtering is applied currently. If so, only render those elements
         // that are not filtered out.
-        if (isFilterActive()) {
+        if (filter.isActive) {
             sortedTodos = filterTodosByCompletion(sortedTodos);
-        }
-
+        }  
+        
         let todosHtml = createTodosHtml(sortedTodos);
         renderTodosWithHtml(todosHtml);
     }
 
-    sortButtonList.forEach(b => b.addEventListener("click", handleTodoSorting));
-};
-attachSortButtonEventHandlers();
-
-
-function isFilterActive() {
-    let filterButton = document.querySelector("#btn-filter-by-completion");
-    let hasFilterAttrSet = filterButton.hasAttribute("data-is-active");
-    if (hasFilterAttrSet) {
-        // Attention: Remember Boolean("false") === true // true!!!
-        return Boolean(filterButton.getAttribute("data-is-active") === "true");
-    }
-    else {
-        return false;
+    attachSortButtonEventHandlers() {
+        this.buttonSortByTitle.addEventListener("click", this.handleSorting.bind(this));
+        this.buttonSortByDueDate.addEventListener("click", this.handleSorting.bind(this));
+        this.buttonSortByCreationDate.addEventListener("click", this.handleSorting.bind(this));
+        this.buttonSortByImportance.addEventListener("click", this.handleSorting.bind(this));
     }
 }
+const sorter = new SortingController();
+sorter.attachSortButtonEventHandlers();
 
-function attachFilterButtonEventHandlers() {
-    const handleTodoFiltering = function(event) {
 
-        const filterButton = event.target;
-        let filteredTodos = undefined;
 
-        // We toggle the filter button back and forth between on (active) and off (inactive).
-        // If previously not set at all, then we set it to true now.
-        // If previously set to true, then we set to false now.
-        // If previously set to false, then we set to true now.
-        if (filterButton.hasAttribute("data-is-active")) {
-            if (filterButton.getAttribute("data-is-active") == "true") {
-                filterButton.setAttribute("data-is-active", "false");
-                filteredTodos = todos;
-            }
-            else {
-                filterButton.setAttribute("data-is-active", "true");
-                filteredTodos = filterTodosByCompletion(todos);
-            }
-        }
-        else {
-            filterButton.setAttribute("data-is-active", "true");
+class FilterController {
+    constructor() {
+        this.isActive = false;
+    }
+
+    // Event handler for filter button
+    handleTodoFiltering(event) {
+        // Toggle filter activity state
+        this.isActive = !this.isActive;
+        let filteredTodos = todos;
+        if (this.isActive) {
             filteredTodos = filterTodosByCompletion(todos);
         }
-
         let todosHtml = createTodosHtml(filteredTodos);
-        renderTodosWithHtml(todosHtml);    
-        
+        renderTodosWithHtml(todosHtml);
     }
-    
-    document.querySelector("#btn-filter-by-completion").addEventListener("click", handleTodoFiltering);
+
+    attachFilterButtonEventHandlers() {
+        document.querySelector("#btn-filter-by-completion").addEventListener("click", this.handleTodoFiltering.bind(this));
+    }
 }
-attachFilterButtonEventHandlers();
+const filter = new FilterController();
+filter.attachFilterButtonEventHandlers();
+
+
 
 /* ------------------ Rendering -------------------- */
 
