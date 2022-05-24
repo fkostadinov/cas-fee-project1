@@ -4,16 +4,88 @@ import todos from ".todomodel.js";
 */
 
 
+/* ------------------ Creating & Updating -------------------- */
+
+class CreateTodoController {
+
+    constructor() {
+        this.buttonCreateTodo = document.querySelector("#btn-create-todo");
+        this.todoListEl = document.querySelector("#todo-list-container");
+        this.todoFormEl = document.querySelector("#todo-form-container");
+    }
+
+    handleCreateButtonClick(event) {
+        this.buttonCreateTodo.style.visibility = "hidden";
+        this.todoListEl.style.display = "none";
+
+        // Be aware that the todo-list-form element must use display "flex", not "block"
+        this.todoFormEl.style.display = "flex";
+    }
+
+    attachCreateButtonEventHandlers() {
+        this.buttonCreateTodo.addEventListener("click", this.handleCreateButtonClick.bind(this));
+    }
+}
+const createController = new CreateTodoController();
+createController.attachCreateButtonEventHandlers();
+
+
+class EditTodoController {
+    constructor() {
+        this.buttonCreateTodo = document.querySelector("#btn-create-todo");
+        this.todoListEl = document.querySelector("#todo-list-container");
+        this.todoFormEl = document.querySelector("#todo-form-container");
+
+        this.buttonSave = document.querySelector("#btn-save-todo");
+        this.buttonSaveOverview = document.querySelector("#btn-save-todo-and-overview");
+        this.buttonCancel = document.querySelector("#btn-cancel-todo");
+    }
+
+    handleEditButtonClick(event) {
+        // We're inside the form tag, so prevent default form submission.
+        event.preventDefault();
+
+        const button = event.target;
+
+        switch(button.id) {
+            case "btn-save-todo":
+            // TODO: save...
+            break;
+
+            case "btn-save-todo-and-overview":
+            // TODO: save...
+            this.buttonCreateTodo.style.visibility = "visible";
+            this.todoFormEl.style.display = "none";
+            this.todoListEl.style.display = "block";
+            break;
+
+            case "btn-cancel-todo":
+            this.buttonCreateTodo.style.visibility = "visible";
+            this.todoFormEl.style.display = "none";
+            this.todoListEl.style.display = "block";
+            break;
+        }
+    }
+
+    attachEditButtonEventHandlers() {
+        this.buttonSave.addEventListener("click", this.handleEditButtonClick.bind(this));
+        this.buttonSaveOverview.addEventListener("click", this.handleEditButtonClick.bind(this));
+        this.buttonCancel.addEventListener("click", this.handleEditButtonClick.bind(this));
+    }
+}
+const editTodoController = new EditTodoController();
+editTodoController.attachEditButtonEventHandlers();
+
 
 /* ------------------ Sorting & Filtering -------------------- */
 
-class FilterController {
+class FilterTodoController {
     constructor() {
         this.isActive = false;
     }
 
     // Event handler for filter button
-    handleTodoFiltering(event) {
+    handleFilterButtonClick(event) {
         // Toggle filter activity state
         this.isActive = !this.isActive;
         let filteredTodos = todos;
@@ -25,17 +97,17 @@ class FilterController {
     }
 
     attachFilterButtonEventHandlers() {
-        document.querySelector("#btn-filter-by-completion").addEventListener("click", this.handleTodoFiltering.bind(this));
+        document.querySelector("#btn-filter-by-completion").addEventListener("click", this.handleFilterButtonClick.bind(this));
     }
 }
-const filter = new FilterController();
-filter.attachFilterButtonEventHandlers();
+const filterController = new FilterTodoController();
+filterController.attachFilterButtonEventHandlers();
 
 
 
-class SortingController {
-    constructor(filter) {
-        this.filter = filter;
+class SortTodoController {
+    constructor(filterController) {
+        this.filterController = filterController;
 
         this.buttonSortByTitle = document.querySelector("#btn-sort-by-title");
         this.buttonSortByDueDate = document.querySelector("#btn-sort-by-duedate");
@@ -48,7 +120,7 @@ class SortingController {
     }
 
     // Event handler for sorting buttons
-    handleSorting(event) {
+    handleSortButtonClick(event) {
         const button = event.target;
 
         // If previous sorter is same as new one, just toggle the sort order
@@ -80,7 +152,7 @@ class SortingController {
 
         // Check if filtering is applied currently. If so, only render those elements
         // that are not filtered out.
-        if (this.filter.isActive) {
+        if (this.filterController.isActive) {
             sortedTodos = filterTodosByCompletion(sortedTodos);
         }  
         
@@ -89,14 +161,14 @@ class SortingController {
     }
 
     attachSortButtonEventHandlers() {
-        this.buttonSortByTitle.addEventListener("click", this.handleSorting.bind(this));
-        this.buttonSortByDueDate.addEventListener("click", this.handleSorting.bind(this));
-        this.buttonSortByCreationDate.addEventListener("click", this.handleSorting.bind(this));
-        this.buttonSortByImportance.addEventListener("click", this.handleSorting.bind(this));
+        this.buttonSortByTitle.addEventListener("click", this.handleSortButtonClick.bind(this));
+        this.buttonSortByDueDate.addEventListener("click", this.handleSortButtonClick.bind(this));
+        this.buttonSortByCreationDate.addEventListener("click", this.handleSortButtonClick.bind(this));
+        this.buttonSortByImportance.addEventListener("click", this.handleSortButtonClick.bind(this));
     }
 }
-const sorter = new SortingController(filter);
-sorter.attachSortButtonEventHandlers();
+const sorterController = new SortTodoController(filterController);
+sorterController.attachSortButtonEventHandlers();
 
 
 

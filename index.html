@@ -23,29 +23,31 @@
 
         <main>
             <div class="todo-control-btns-container">
-                <button class="btn">Create new Todo</button>
-                <button class="btn">Toggle Style</button>
+                <button class="btn" id="btn-create-todo">Create new Todo</button>
+                <button class="btn" id="btn-toggle-style">Toggle Style</button>
             </div>
 
             <div>
-                <div class="todo-list-btns-container">
-                    <div>
-                        <!-- flex align left -->
-                        <button class="btn" id="btn-sort-by-title">Title</button>
-                        <button class="btn" id="btn-sort-by-duedate">By Due Date</button>
-                        <button class="btn" id="btn-sort-by-creationdate">By Creation Date</button>
-                        <button class="btn" id="btn-sort-by-importance">By Importance</button>
+                <div id="todo-list-container">
+                    <div class="todo-list-btns-container">
+                        <div>
+                            <!-- flex align left -->
+                            <button class="btn" id="btn-sort-by-title">By Title</button>
+                            <button class="btn" id="btn-sort-by-duedate">By Due Date</button>
+                            <button class="btn" id="btn-sort-by-creationdate">By Creation Date</button>
+                            <button class="btn" id="btn-sort-by-importance">By Importance</button>
+                        </div>
+                        <div>
+                            <!-- flex align right -->
+                            <button class="btn" id="btn-filter-by-completion">Filter Completed</button>
+                        </div>
                     </div>
-                    <div>
-                        <!-- flex align right -->
-                        <button class="btn" id="btn-filter-by-completion">Filter Completed</button>
-                    </div>
+                    <ol class="todo-list-ol" id="todos">
+                        <!-- Todo items -->
+                    </ol>
                 </div>
-                <ol class="todo-list-ol" id="todos">
-                    <!-- Todo items -->
-                </ol>
 
-                <form class="todo-form-container">
+                <form id="todo-form-container">
                     <div class="todo-form-inputs">
                         <div class="todo-form-item">
                             <label class="todo-form-item-lbl" for="todo-input-title">Title</label>
@@ -74,9 +76,9 @@
 
                     </div>
                     <div class="todo-form-btns">
-                        <button class="btn">Update</button>
-                        <button class="btn">Update & Overview</button>
-                        <button class="btn">Overview</button>
+                        <button class="btn" id="btn-save-todo">Save</button>
+                        <button class="btn" id="btn-save-todo-and-overview">Save & Overview</button>
+                        <button class="btn" id="btn-cancel-todo">Cancel</button>
                     </div>
                 </form>
             </div>
