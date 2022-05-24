@@ -4,6 +4,34 @@ import todos from ".todomodel.js";
 */
 
 
+/* ------------------ Bright vs dark mode -------------------- */
+class ToggleStyleController {
+    constructor() {
+        this.buttonToggleStyle = document.querySelector("#btn-toggle-style");
+        this.isInDarkMode = false;   
+    }
+
+    handleToggleStyleButtonClick(event) {
+        this.isInDarkMode = !this.isInDarkMode;
+
+        if (this.isInDarkMode) {
+            document.body.style.backgroundColor = "var(--color-near-black)";
+            document.body.style.color = "var(--color-white)";
+        }
+        else {
+            document.body.style.backgroundColor = "var(--color-near-white)";
+            document.body.style.color = "var(--color-black)";
+        }
+    }
+
+    attachToggleStyleEventHandlers() {
+        this.buttonToggleStyle.addEventListener("click", this.handleToggleStyleButtonClick.bind(this));
+    }
+}
+const toggleStyleController = new ToggleStyleController();
+toggleStyleController.attachToggleStyleEventHandlers();
+
+
 /* ------------------ Creating & Updating -------------------- */
 
 class CreateTodoController {
