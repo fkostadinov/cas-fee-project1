@@ -4,6 +4,48 @@ import todos from ".todomodel.js";
 */
 
 
+/* ------------------ Rendering -------------------- */
+
+class Renderer {
+    constructor() {
+        this.todoListEl = document.querySelector("#todos");
+    }
+
+    createTodosHtml(todos) {
+        return todos.map(todo => `
+            <li class="todo-list-item">
+            <div class="todo-list-item-container">
+                <div class="todo-item-due-date">${todo.duedate}</div>
+                <div class="todo-item-title">${todo.title}</div>
+                <div class="todo-item-importance">${todo.importance}</div>
+                <div class="todo-item-description">${todo.description}</div>
+                <div class="todo-item-isdone">
+                    <input type="checkbox" id="todo-item-isdone-1">
+                    <label class="todo-item-checkbox-lbl" for="todo-item-isdone-1">${todo.isdone ? 'Completed' : 'Open'}</label>
+                </div>
+                <div class="todo-item-btn">
+                    <button class="btn">Edit</button>
+                </div>
+            </div>
+            <hr>
+        </li>        
+        `).join('');
+    }
+    
+    renderTodosWithHtml(todosHtml) {
+        this.todoListEl.innerHTML = todosHtml;
+    }
+    
+    renderTodos() {
+        let todosHtml = this.createTodosHtml(todos);
+        this.renderTodosWithHtml(todosHtml);
+    }
+    
+}
+const renderer = new Renderer();
+renderer.renderTodos();
+
+
 /* ------------------ Bright vs dark mode -------------------- */
 class ToggleStyleController {
     constructor() {
@@ -108,7 +150,8 @@ editTodoController.attachEditButtonEventHandlers();
 /* ------------------ Sorting & Filtering -------------------- */
 
 class FilterTodoController {
-    constructor() {
+    constructor(renderer) {
+        this.renderer = renderer;
         this.isActive = false;
     }
 
@@ -120,21 +163,22 @@ class FilterTodoController {
         if (this.isActive) {
             filteredTodos = filterTodosByCompletion(todos);
         }
-        let todosHtml = createTodosHtml(filteredTodos);
-        renderTodosWithHtml(todosHtml);
+        let todosHtml = this.renderer.createTodosHtml(filteredTodos);
+        this.renderer.renderTodosWithHtml(todosHtml);
     }
 
     attachFilterButtonEventHandlers() {
         document.querySelector("#btn-filter-by-completion").addEventListener("click", this.handleFilterButtonClick.bind(this));
     }
 }
-const filterController = new FilterTodoController();
+const filterController = new FilterTodoController(renderer);
 filterController.attachFilterButtonEventHandlers();
 
 
 
 class SortTodoController {
-    constructor(filterController) {
+    constructor(renderer, filterController) {
+        this.renderer = renderer;
         this.filterController = filterController;
 
         this.buttonSortByTitle = document.querySelector("#btn-sort-by-title");
@@ -184,8 +228,8 @@ class SortTodoController {
             sortedTodos = filterTodosByCompletion(sortedTodos);
         }  
         
-        let todosHtml = createTodosHtml(sortedTodos);
-        renderTodosWithHtml(todosHtml);
+        let todosHtml = this.renderer.createTodosHtml(sortedTodos);
+        this.renderer.renderTodosWithHtml(todosHtml);
     }
 
     attachSortButtonEventHandlers() {
@@ -195,43 +239,9 @@ class SortTodoController {
         this.buttonSortByImportance.addEventListener("click", this.handleSortButtonClick.bind(this));
     }
 }
-const sorterController = new SortTodoController(filterController);
+const sorterController = new SortTodoController(renderer, filterController);
 sorterController.attachSortButtonEventHandlers();
 
-
-
-/* ------------------ Rendering -------------------- */
-
-function createTodosHtml(todos) {
-    return todos.map(todo => `
-        <li class="todo-list-item">
-        <div class="todo-list-item-container">
-            <div class="todo-item-due-date">${todo.duedate}</div>
-            <div class="todo-item-title">${todo.title}</div>
-            <div class="todo-item-importance">${todo.importance}</div>
-            <div class="todo-item-description">${todo.description}</div>
-            <div class="todo-item-isdone">
-                <input type="checkbox" id="todo-item-isdone-1">
-                <label class="todo-item-checkbox-lbl" for="todo-item-isdone-1">${todo.isdone ? 'Completed' : 'Open'}</label>
-            </div>
-            <div class="todo-item-btn">
-                <button class="btn">Edit</button>
-            </div>
-        </div>
-        <hr>
-    </li>        
-    `).join('');
-}
-
-function renderTodosWithHtml(todosHtml) {
-    const todoListElement = document.querySelector("#todos");
-    todoListElement.innerHTML = todosHtml;
-}
-
-function renderTodos() {
-    let todosHtml = createTodosHtml(todos);
-    renderTodosWithHtml(todosHtml);
-}
 
 /*
 let observer = new MutationObserver(function(mutations) {
@@ -243,8 +253,6 @@ let observer = new MutationObserver(function(mutations) {
 
 observer.observe(document, {attributes: false, childList: true, characterData: false, subtree: true});
 */
-
-renderTodos();
 
 /*
 export { todoListElement };
