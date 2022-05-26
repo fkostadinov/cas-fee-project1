@@ -11,8 +11,9 @@
 
     <link href="./assets/css/style.css" rel="stylesheet">
 
-    <script src="./assets/js/todomodel.js"></script>
-    <script src="./assets/js/todocontroller.js"></script>
+    <script src="./js/services/todo-model.js" defer></script>
+    <script src="./js/services/todo-service.js" defer></script>
+    <script src="./js/controllers/todo-controller.js" defer></script>
 
     <title>Todo App</title>
 </head>
@@ -67,7 +68,7 @@
 
                         <div class="todo-form-item">
                             <input type="checkbox" id="todo-form-isdone" value="Finished">
-                            <label class="todo-form-checkbox-lbl" for="todo-form-isdone">Open</label>
+                            <label class="todo-form-checkbox-lbl" for="todo-form-isdone">Completed</label>
                         </div>
 
                         <div class="todo-form-item">

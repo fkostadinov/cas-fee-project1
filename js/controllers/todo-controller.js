@@ -1,28 +1,6 @@
-
 /*
 import todos from ".todomodel.js";
 */
-
-
-// TODO: Use COMContentLoaded event to refer to elements only once they are loaded!
-
-
-
-class TodoItem {
-    static idCounter = 0;
-    
-    constructor(title, description, importance, duedate, isdone) {
-        this.id = ++TodoItem.idCounter;
-
-        this.title = title;
-        this.description = description;
-        this.importance = importance;
-        this.duedate = duedate;
-        this.isdone = isdone;
-        
-        this.creationdate = undefined; // TODO
-    }
-}
 
 
 /* ------------------ Rendering -------------------- */
@@ -37,11 +15,11 @@ class Renderer {
                 <div class="todo-item-importance">${todoItem.importance}</div>
                 <div class="todo-item-description">${todoItem.description}</div>
                 <div class="todo-item-isdone">
-                    <input type="checkbox" id="todo-item-isdone-1">
-                    <label class="todo-item-checkbox-lbl" for="todo-item-isdone-1">${todoItem.isdone ? 'Completed' : 'Open'}</label>
+                    <input type="checkbox" id="todo-item-isdone-${todoItem.id}" ${ todoItem.isdone ? "checked" : ""} disabled>
+                    <label class="todo-item-checkbox-lbl" for="todo-item-isdone-${todoItem.id}">Completed</label>
                 </div>
                 <div class="todo-item-btn">
-                    <button class="btn">Edit</button>
+                    <button class="btn" data-todo-item-id="${todoItem.id}">Edit</button>
                 </div>
             </div>
             <hr>
@@ -96,6 +74,12 @@ const toggleStyleController = new ToggleStyleController();
 
 class CreateTodoController {
     handleCreateButtonClick(event) {
+        document.querySelector("#todo-input-title").value = "";        
+        document.querySelector("#todo-input-importance").value = 1;
+        document.querySelector("#todo-form-isdone").checked = false;
+        document.querySelector("#todo-input-duedate").value = "1970-01-01";
+        document.querySelector("#todo-input-description").value = "";
+
         document.querySelector("#btn-create-todo").style.visibility = "hidden";
         document.querySelector("#todo-list-container").style.display = "none";
 
@@ -116,11 +100,41 @@ class EditTodoController {
         let inputImportanceEl = document.querySelector("#todo-input-importance");
         let inputDuedateEl = document.querySelector("#todo-input-duedate");
         let inputIsDoneEl = document.querySelector("#todo-form-isdone");
-        let inputDescriptionEl = document.querySelector("#todo-input-description");        
-        // TODO: Read out the input fields and create a new Todo item
+        let inputDescriptionEl = document.querySelector("#todo-input-description");    
+
+        let todoItem = new TodoItem(
+            inputTitleEl.value,
+            inputDescriptionEl.value,
+            Number(inputImportanceEl.value),
+            inputDuedateEl.value,
+            inputIsDoneEl.checked);
+        
+        // TODO: Save the todo item back to the item store...
     }
 
     handleEditButtonClick(event) {
+        // Ignore clicks from checkbox labels
+        if (event.target.classList.contains("todo-item-checkbox-lbl")) {
+            return;
+        }
+
+        let todoItemId = event.target.dataset.todoItemId;
+        let todoItem = todos.find(t => t.id === todoItemId);
+
+        document.querySelector("#todo-input-title").value = todoItem.title;        
+        document.querySelector("#todo-input-importance").value = todoItem.importance;
+        document.querySelector("#todo-form-isdone").checked = todoItem.isdone;
+        document.querySelector("#todo-input-duedate").value = todoItem.duedate;
+        document.querySelector("#todo-input-description").value = todoItem.description;
+
+        document.querySelector("#btn-create-todo").style.visibility = "hidden";
+        document.querySelector("#todo-list-container").style.display = "none";
+
+        // Be aware that the todo-list-form element must use display "flex", not "block"
+        document.querySelector("#todo-form-container").style.display = "flex";
+    }
+
+    handleSaveOrCancelClick(event) {
         // We're inside the form tag, so prevent default form submission.
         event.preventDefault();
 
@@ -128,11 +142,11 @@ class EditTodoController {
 
         switch(button.id) {
             case "btn-save-todo":
-            // TODO: save...
+            this.saveTodo();
             break;
 
             case "btn-save-todo-and-overview":
-            // TODO: save...
+            this.saveTodo();
             document.querySelector("#btn-create-todo").style.visibility = "visible";
             document.querySelector("#todo-form-container").style.display = "none";
             document.querySelector("#todo-list-container").style.display = "block";
@@ -147,9 +161,10 @@ class EditTodoController {
     }
 
     attachEditButtonEventHandlers() {
-        document.querySelector("#btn-save-todo").addEventListener("click", this.handleEditButtonClick.bind(this));
-        document.querySelector("#btn-save-todo-and-overview").addEventListener("click", this.handleEditButtonClick.bind(this));
-        document.querySelector("#btn-cancel-todo").addEventListener("click", this.handleEditButtonClick.bind(this));
+        document.querySelector("#todos").addEventListener("click", this.handleEditButtonClick.bind(this));
+        document.querySelector("#btn-save-todo").addEventListener("click", this.handleSaveOrCancelClick.bind(this));
+        document.querySelector("#btn-save-todo-and-overview").addEventListener("click", this.handleSaveOrCancelClick.bind(this));
+        document.querySelector("#btn-cancel-todo").addEventListener("click", this.handleSaveOrCancelClick.bind(this));
     }
 }
 const editTodoController = new EditTodoController();
@@ -246,7 +261,7 @@ const sorterController = new SortTodoController(renderer, filterController);
 
 
 
-const attachEventListeners = function() {
+const initEventHandlers = function() {
     toggleStyleController.attachToggleStyleEventHandlers();
     createController.attachCreateButtonEventHandlers();
     editTodoController.attachEditButtonEventHandlers();
@@ -261,12 +276,12 @@ const attachEventListeners = function() {
 if (document.readyState == "loading") {
     document.addEventListener("DOMContentLoaded", () => {
         renderer.renderTodos();
-        attachEventListeners();
+        initEventHandlers();
     });
 }
 else {
     renderer.renderTodos();
-    attachEventListeners();
+    initEventHandlers();
 }
 
 
