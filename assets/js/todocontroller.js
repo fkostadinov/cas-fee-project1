@@ -4,24 +4,41 @@ import todos from ".todomodel.js";
 */
 
 
+// TODO: Use COMContentLoaded event to refer to elements only once they are loaded!
+
+
+
+class TodoItem {
+    static idCounter = 0;
+    
+    constructor(title, description, importance, duedate, isdone) {
+        this.id = ++TodoItem.idCounter;
+
+        this.title = title;
+        this.description = description;
+        this.importance = importance;
+        this.duedate = duedate;
+        this.isdone = isdone;
+        
+        this.creationdate = undefined; // TODO
+    }
+}
+
+
 /* ------------------ Rendering -------------------- */
 
 class Renderer {
-    constructor() {
-        this.todoListEl = document.querySelector("#todos");
-    }
-
-    createTodosHtml(todos) {
-        return todos.map(todo => `
+    createTodoItemHtml(todoItem) {
+        return `
             <li class="todo-list-item">
             <div class="todo-list-item-container">
-                <div class="todo-item-due-date">${todo.duedate}</div>
-                <div class="todo-item-title">${todo.title}</div>
-                <div class="todo-item-importance">${todo.importance}</div>
-                <div class="todo-item-description">${todo.description}</div>
+                <div class="todo-item-due-date">${todoItem.duedate}</div>
+                <div class="todo-item-title">${todoItem.title}</div>
+                <div class="todo-item-importance">${todoItem.importance}</div>
+                <div class="todo-item-description">${todoItem.description}</div>
                 <div class="todo-item-isdone">
                     <input type="checkbox" id="todo-item-isdone-1">
-                    <label class="todo-item-checkbox-lbl" for="todo-item-isdone-1">${todo.isdone ? 'Completed' : 'Open'}</label>
+                    <label class="todo-item-checkbox-lbl" for="todo-item-isdone-1">${todoItem.isdone ? 'Completed' : 'Open'}</label>
                 </div>
                 <div class="todo-item-btn">
                     <button class="btn">Edit</button>
@@ -29,11 +46,15 @@ class Renderer {
             </div>
             <hr>
         </li>        
-        `).join('');
+        `;
+    }
+
+    createTodosHtml(todoItems) {
+        return todoItems.map(todoItem => this.createTodoItemHtml(todoItem)).join('');
     }
     
     renderTodosWithHtml(todosHtml) {
-        this.todoListEl.innerHTML = todosHtml;
+        document.querySelector("#todos").innerHTML = todosHtml;
     }
     
     renderTodos() {
@@ -43,13 +64,11 @@ class Renderer {
     
 }
 const renderer = new Renderer();
-renderer.renderTodos();
 
 
 /* ------------------ Bright vs dark mode -------------------- */
 class ToggleStyleController {
     constructor() {
-        this.buttonToggleStyle = document.querySelector("#btn-toggle-style");
         this.isInDarkMode = false;   
     }
 
@@ -67,48 +86,38 @@ class ToggleStyleController {
     }
 
     attachToggleStyleEventHandlers() {
-        this.buttonToggleStyle.addEventListener("click", this.handleToggleStyleButtonClick.bind(this));
+        document.querySelector("#btn-toggle-style").addEventListener("click", this.handleToggleStyleButtonClick.bind(this));
     }
 }
 const toggleStyleController = new ToggleStyleController();
-toggleStyleController.attachToggleStyleEventHandlers();
 
 
 /* ------------------ Creating & Updating -------------------- */
 
 class CreateTodoController {
-
-    constructor() {
-        this.buttonCreateTodo = document.querySelector("#btn-create-todo");
-        this.todoListEl = document.querySelector("#todo-list-container");
-        this.todoFormEl = document.querySelector("#todo-form-container");
-    }
-
     handleCreateButtonClick(event) {
-        this.buttonCreateTodo.style.visibility = "hidden";
-        this.todoListEl.style.display = "none";
+        document.querySelector("#btn-create-todo").style.visibility = "hidden";
+        document.querySelector("#todo-list-container").style.display = "none";
 
         // Be aware that the todo-list-form element must use display "flex", not "block"
-        this.todoFormEl.style.display = "flex";
+        document.querySelector("#todo-form-container").style.display = "flex";
     }
 
     attachCreateButtonEventHandlers() {
-        this.buttonCreateTodo.addEventListener("click", this.handleCreateButtonClick.bind(this));
+        document.querySelector("#btn-create-todo").addEventListener("click", this.handleCreateButtonClick.bind(this));
     }
 }
 const createController = new CreateTodoController();
-createController.attachCreateButtonEventHandlers();
 
 
 class EditTodoController {
-    constructor() {
-        this.buttonCreateTodo = document.querySelector("#btn-create-todo");
-        this.todoListEl = document.querySelector("#todo-list-container");
-        this.todoFormEl = document.querySelector("#todo-form-container");
-
-        this.buttonSave = document.querySelector("#btn-save-todo");
-        this.buttonSaveOverview = document.querySelector("#btn-save-todo-and-overview");
-        this.buttonCancel = document.querySelector("#btn-cancel-todo");
+    saveTodo() {
+        let inputTitleEl = document.querySelector("#todo-input-title");
+        let inputImportanceEl = document.querySelector("#todo-input-importance");
+        let inputDuedateEl = document.querySelector("#todo-input-duedate");
+        let inputIsDoneEl = document.querySelector("#todo-form-isdone");
+        let inputDescriptionEl = document.querySelector("#todo-input-description");        
+        // TODO: Read out the input fields and create a new Todo item
     }
 
     handleEditButtonClick(event) {
@@ -124,27 +133,27 @@ class EditTodoController {
 
             case "btn-save-todo-and-overview":
             // TODO: save...
-            this.buttonCreateTodo.style.visibility = "visible";
-            this.todoFormEl.style.display = "none";
-            this.todoListEl.style.display = "block";
+            document.querySelector("#btn-create-todo").style.visibility = "visible";
+            document.querySelector("#todo-form-container").style.display = "none";
+            document.querySelector("#todo-list-container").style.display = "block";
             break;
 
             case "btn-cancel-todo":
-            this.buttonCreateTodo.style.visibility = "visible";
-            this.todoFormEl.style.display = "none";
-            this.todoListEl.style.display = "block";
+            document.querySelector("#btn-create-todo").style.visibility = "visible";
+            document.querySelector("#todo-form-container").style.display = "none";
+            document.querySelector("#todo-list-container").style.display = "block";
             break;
         }
     }
 
     attachEditButtonEventHandlers() {
-        this.buttonSave.addEventListener("click", this.handleEditButtonClick.bind(this));
-        this.buttonSaveOverview.addEventListener("click", this.handleEditButtonClick.bind(this));
-        this.buttonCancel.addEventListener("click", this.handleEditButtonClick.bind(this));
+        document.querySelector("#btn-save-todo").addEventListener("click", this.handleEditButtonClick.bind(this));
+        document.querySelector("#btn-save-todo-and-overview").addEventListener("click", this.handleEditButtonClick.bind(this));
+        document.querySelector("#btn-cancel-todo").addEventListener("click", this.handleEditButtonClick.bind(this));
     }
 }
 const editTodoController = new EditTodoController();
-editTodoController.attachEditButtonEventHandlers();
+
 
 
 /* ------------------ Sorting & Filtering -------------------- */
@@ -172,7 +181,7 @@ class FilterTodoController {
     }
 }
 const filterController = new FilterTodoController(renderer);
-filterController.attachFilterButtonEventHandlers();
+
 
 
 
@@ -180,12 +189,6 @@ class SortTodoController {
     constructor(renderer, filterController) {
         this.renderer = renderer;
         this.filterController = filterController;
-
-        this.buttonSortByTitle = document.querySelector("#btn-sort-by-title");
-        this.buttonSortByDueDate = document.querySelector("#btn-sort-by-duedate");
-        this.buttonSortByCreationDate = document.querySelector("#btn-sort-by-creationdate");
-        this.buttonSortByImportance = document.querySelector("#btn-sort-by-importance");
-        //const sortButtonList = [buttonSortByTitle, buttonSortByDueDate, buttonSortByCreationDate, buttonSortByImportance];
 
         this.activeSorter = undefined;
         this.isAscending = true; // true: ascending, false: descending
@@ -233,26 +236,39 @@ class SortTodoController {
     }
 
     attachSortButtonEventHandlers() {
-        this.buttonSortByTitle.addEventListener("click", this.handleSortButtonClick.bind(this));
-        this.buttonSortByDueDate.addEventListener("click", this.handleSortButtonClick.bind(this));
-        this.buttonSortByCreationDate.addEventListener("click", this.handleSortButtonClick.bind(this));
-        this.buttonSortByImportance.addEventListener("click", this.handleSortButtonClick.bind(this));
+        document.querySelector("#btn-sort-by-title").addEventListener("click", this.handleSortButtonClick.bind(this));
+        document.querySelector("#btn-sort-by-duedate").addEventListener("click", this.handleSortButtonClick.bind(this));
+        document.querySelector("#btn-sort-by-creationdate").addEventListener("click", this.handleSortButtonClick.bind(this));
+        document.querySelector("#btn-sort-by-importance").addEventListener("click", this.handleSortButtonClick.bind(this));
     }
 }
 const sorterController = new SortTodoController(renderer, filterController);
-sorterController.attachSortButtonEventHandlers();
 
 
-/*
-let observer = new MutationObserver(function(mutations) {
-    if (document.contains(document.querySelector("#todos"))) {
-        observer.disconnect();
-        renderTodos();
-    }
-});
 
-observer.observe(document, {attributes: false, childList: true, characterData: false, subtree: true});
-*/
+const attachEventListeners = function() {
+    toggleStyleController.attachToggleStyleEventHandlers();
+    createController.attachCreateButtonEventHandlers();
+    editTodoController.attachEditButtonEventHandlers();
+    filterController.attachFilterButtonEventHandlers();
+    sorterController.attachSortButtonEventHandlers();    
+}
+
+// Don't attach event listeners to DOM elements while the document is still in loading state.
+// While in loading state simply attach a DOMContentLoaded listener and wait until completed.
+// If no longer in loading state then you can directly attach all the event listeners.
+// See here for infos: https://wiki.selfhtml.org/wiki/JavaScript/DOM/Event/DOMContentLoaded
+if (document.readyState == "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+        renderer.renderTodos();
+        attachEventListeners();
+    });
+}
+else {
+    renderer.renderTodos();
+    attachEventListeners();
+}
+
 
 /*
 export { todoListElement };
