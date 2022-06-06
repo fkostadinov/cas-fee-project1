@@ -2,6 +2,10 @@
 import todos from ".todomodel.js";
 */
 
+/* ------------------ TodoService -------------------- */
+
+const todoService = new TodoService();
+todoService.loadMockData();
 
 /* ------------------ Rendering -------------------- */
 
@@ -36,7 +40,7 @@ class Renderer {
     }
     
     renderTodos() {
-        let todosHtml = this.createTodosHtml(todos);
+        let todosHtml = this.createTodosHtml(todoService.getAllTodos());
         this.renderTodosWithHtml(todosHtml);
     }
     
@@ -113,25 +117,27 @@ class EditTodoController {
     }
 
     handleEditButtonClick(event) {
-        // Ignore clicks from checkbox labels
-        if (event.target.classList.contains("todo-item-checkbox-lbl")) {
-            return;
+        // Ignore events that are not coming from edit button clicks (e.g.
+        // clicks on checkbox labels)
+        if (event.target.matches("button[data-todo-item-id]")) {
+            let todoItemId = event.target.dataset.todoItemId;
+            let todoItem = todoService.getAllTodos().find(t => t.id === todoItemId);
+    
+            document.querySelector("#todo-input-title").value = todoItem.title;        
+            document.querySelector("#todo-input-importance").value = todoItem.importance;
+            document.querySelector("#todo-form-isdone").checked = todoItem.isdone;
+            document.querySelector("#todo-input-duedate").value = todoItem.duedate;
+            document.querySelector("#todo-input-description").value = todoItem.description;
+    
+            document.querySelector("#btn-create-todo").style.visibility = "hidden";
+            document.querySelector("#todo-list-container").style.display = "none";
+    
+            // Be aware that the todo-list-form element must use display "flex", not "block"
+            document.querySelector("#todo-form-container").style.display = "flex";
         }
 
-        let todoItemId = event.target.dataset.todoItemId;
-        let todoItem = todos.find(t => t.id === todoItemId);
-
-        document.querySelector("#todo-input-title").value = todoItem.title;        
-        document.querySelector("#todo-input-importance").value = todoItem.importance;
-        document.querySelector("#todo-form-isdone").checked = todoItem.isdone;
-        document.querySelector("#todo-input-duedate").value = todoItem.duedate;
-        document.querySelector("#todo-input-description").value = todoItem.description;
-
-        document.querySelector("#btn-create-todo").style.visibility = "hidden";
-        document.querySelector("#todo-list-container").style.display = "none";
-
-        // Be aware that the todo-list-form element must use display "flex", not "block"
-        document.querySelector("#todo-form-container").style.display = "flex";
+        // Other clicks here
+        // else ...
     }
 
     handleSaveOrCancelClick(event) {
@@ -174,7 +180,9 @@ const editTodoController = new EditTodoController();
 /* ------------------ Sorting & Filtering -------------------- */
 
 class FilterTodoController {
-    constructor(renderer) {
+    constructor(todoService, renderer) {
+        this.todoService = todoService;
+
         this.renderer = renderer;
         this.isActive = false;
     }
@@ -183,9 +191,9 @@ class FilterTodoController {
     handleFilterButtonClick(event) {
         // Toggle filter activity state
         this.isActive = !this.isActive;
-        let filteredTodos = todos;
+        let filteredTodos = this.todoService.getAllTodos();
         if (this.isActive) {
-            filteredTodos = filterTodosByCompletion(todos);
+            filteredTodos = this.todoService.getFilteredTodos(todo => todo.isdone === false);
         }
         let todosHtml = this.renderer.createTodosHtml(filteredTodos);
         this.renderer.renderTodosWithHtml(todosHtml);
@@ -195,13 +203,14 @@ class FilterTodoController {
         document.querySelector("#btn-filter-by-completion").addEventListener("click", this.handleFilterButtonClick.bind(this));
     }
 }
-const filterController = new FilterTodoController(renderer);
+const filterController = new FilterTodoController(todoService, renderer);
 
 
 
 
 class SortTodoController {
-    constructor(renderer, filterController) {
+    constructor(todoService, renderer, filterController) {
+        this.todoService = todoService;
         this.renderer = renderer;
         this.filterController = filterController;
 
@@ -219,32 +228,31 @@ class SortTodoController {
         }
 
         this.activeSorter = button;
+
+        let ts = this.filterController.isActive ?
+            this.todoService.getFilteredTodos(todo => todo.isdone === false) :
+            this.todoService.getAllTodos();
+
         let sortOrder = this.isAscending ? "ascending" : "descending";
-        let sortedTodos = todos;
+        let sortedTodos = undefined;
 
         switch(button.id) {
             case "btn-sort-by-title":
-                sortedTodos = sortTodosByTitle(todos, sortOrder);
+                sortedTodos = todoService.getTodosSortedByTitle(sortOrder, ts);
             break;
     
             case "btn-sort-by-duedate":
-                sortedTodos = sortTodosByDueDate(todos, sortOrder);
+                sortedTodos = todoService.getTodosSortedByDueDate(sortOrder, ts);
             break;
     
             case "btn-sort-by-creationdate":
-                sortedTodos = sortTodosByCreationDate(todos, sortOrder);
+                sortedTodos = todoService.getTodosSortedByCreationDate(sortOrder, ts);
             break;
     
             case "btn-sort-by-importance":
-                sortedTodos = sortTodosByImportance(todos, sortOrder);
+                sortedTodos = todoService.getTodosSortedByImportance(sortOrder, ts);
             break;
         }
-
-        // Check if filtering is applied currently. If so, only render those elements
-        // that are not filtered out.
-        if (this.filterController.isActive) {
-            sortedTodos = filterTodosByCompletion(sortedTodos);
-        }  
         
         let todosHtml = this.renderer.createTodosHtml(sortedTodos);
         this.renderer.renderTodosWithHtml(todosHtml);
@@ -257,7 +265,7 @@ class SortTodoController {
         document.querySelector("#btn-sort-by-importance").addEventListener("click", this.handleSortButtonClick.bind(this));
     }
 }
-const sorterController = new SortTodoController(renderer, filterController);
+const sorterController = new SortTodoController(todoService, renderer, filterController);
 
 
 
