@@ -1,18 +1,14 @@
 class TodoItem {
-    //static idCounter = 0;
-    
     constructor(title, description, importance, duedate, isdone) {
 
-        this.id = undefined; // Must be type 'number' (not 'string' or 'Number'!)
-        //this.id = new Number(++TodoItem.idCounter).toString();
+        this.id = undefined; // Must be of type 'number' (not 'string' or 'Number'!)
+        this.creationdate = undefined; // Must be of type 'string'
 
         this.title = title;
         this.description = description;
         this.importance = importance;
         this.duedate = duedate;
-        this.isdone = isdone;
-        
-        this.creationdate = undefined; // TODO
+        this.isdone = isdone;        
     }
 }
 

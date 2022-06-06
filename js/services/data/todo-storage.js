@@ -7,27 +7,22 @@ class TodoStorage {
         TodoItemFactory.setId(TodoItemFactory.nextIdAndIncr());
         TodoItemFactory.setCreationdate(new Date().toISOString().split("T")[0]);
         const todoItem1 = TodoItemFactory.createTodoItem("Fräsen fräsen", "Fräsen müssten mal wieder gefräst werden.", 1, "2022-05-24", false);
-        //todoItem1.creationdate = "1975-01-01";
 
         TodoItemFactory.setId(TodoItemFactory.nextIdAndIncr());
         TodoItemFactory.setCreationdate(new Date().toISOString().split("T")[0]);
         const todoItem2 = TodoItemFactory.createTodoItem("Weltfrieden", "Make love, not war.", 5, "1999-12-31", false);
-        //todoItem2.creationdate = "1981-01-12";
 
         TodoItemFactory.setId(TodoItemFactory.nextIdAndIncr());
         TodoItemFactory.setCreationdate(new Date().toISOString().split("T")[0]);
         const todoItem3 = TodoItemFactory.createTodoItem("Kuchen essen", "Make cake, not tarte.", 4, "2024-12-31", true);
-        //todoItem3.creationdate = "2011-10-01";
 
         TodoItemFactory.setId(TodoItemFactory.nextIdAndIncr());
         TodoItemFactory.setCreationdate(new Date().toISOString().split("T")[0]);
         const todoItem4 = TodoItemFactory.createTodoItem("Erwachsenwerden", "", 3, "1998-04-05", true);
-        //todoItem4.creationdate = "2010-08-23";
 
         TodoItemFactory.setId(TodoItemFactory.nextIdAndIncr());
         TodoItemFactory.setCreationdate(new Date().toISOString().split("T")[0]);
         const todoItem5 = TodoItemFactory.createTodoItem("Ferien machen", "Mal wieder Ferien machen", 1, "2021-11-01", false);
-        //todoItem5.creationdate = "2019-05-19";
 
         this.todos = [
             {id: todoItem1.id, creationdate: todoItem1.creationdate, duedate: todoItem1.duedate, title: todoItem1.title, importance: todoItem1.importance, description: todoItem1.description, isdone: todoItem1.isdone},

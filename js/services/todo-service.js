@@ -26,8 +26,6 @@ class TodoService {
     }
 
     saveTodo(todoToSave) {
-        console.log(todoToSave);
-        console.log(this.storage.todos);
         let i = this.storage.todos.findIndex(todo => todo.id === todoToSave.id);
         if (i < 0) {
             // If the item was not found (i.e. i === -1) we should treat it as a new item to save
