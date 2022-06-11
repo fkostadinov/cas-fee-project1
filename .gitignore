@@ -1,2 +1,6 @@
+# Don't store the DB file
+data/
+data/todos.db
+
 # Dependency directories
 node_modules/
