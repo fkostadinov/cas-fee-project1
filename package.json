@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/fkostadinov/cas-fee-project1#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "@seald-io/nedb": "^2.0.4",
+    "body-parser": "^1.19.0",
+    "method-override": "^3.0.0"
   }
 }

@@ -1,30 +1,24 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import methodOverride from 'method-override';
+import {todoRoutes} from './routes/todo-routes.js'
+
 const app = express();
-const router = express.Router();
 
-function errorHandler(err, req, res, next) {
-    res.status(500).end(err.message);
-}
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(methodOverride(methodOverrideFn));
 
-function notFound(req, res, next) {
-    res.setHeader("Content-Type", 'text/html');
-    res.status(404).send("Unable to find the requested page! ")
-}
-
-function myDummyLogger(options) {
-    options = options ? options : {};
-
-    return function myInnerDummyLogger(req, res, next) {
-        console.log(req.method + ":" + req.url);
-        next();
+function methodOverrideFn(req, res) {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        let method = req.body._method;
+        delete req.body._method;
+        return method;
     }
 }
 
-app.use(myDummyLogger());
-app.use(router);
+app.use(todoRoutes);
 app.use(express.static('./public'));
-app.use(notFound);
-app.use(errorHandler);
 
 const hostname = '127.0.0.1';
 const port = 3001;
