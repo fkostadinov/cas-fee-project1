@@ -1,41 +1,74 @@
+//import { httpService } from "./http-service.js";
+
 class TodoService {
     constructor(storage) {
         this.storage = storage || new TodoStorage();
+
+        this.httpService = new HttpService();
     }
 
-    loadMockData() {
-        this.storage.initMockData();
-    }
-
-    getAllTodos() {
-        return this.storage.todos;
+    /**
+     * @returns a promise that will resolve to {payload: [ <actual data> ]}
+     */
+    async getAllTodos() {
+        let promise = await this.httpService.ajax("GET", "/api/todos", undefined)
+            .then(function(data) {
+                return data.payload;
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+        
+        return promise;
     }
 
     getFilteredTodos(filterFunction) {
         return this.storage.todos.filter(filterFunction);
     }
 
-    /*
+    /**
      * Note: The given todo id must be of type 'number' (not string or Number!)
+     * @returns a promise that will resolve to {payload: <actual object> }
      */
-    findTodoById(todoId) {
-        if (typeof(todoId) != "number") {
-            console.error("TodoService.findTodoById: The given todoId is not of type 'number'!");
-        }
-        return this.storage.todos.find(todo => todo.id === todoId);
+    async findTodoById(todoId) {
+        let promise = await this.httpService.ajax("GET", `/api/todos/${todoId}`, undefined)
+        .then(function(data) {
+            return data.payload;
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
+
+        return promise;
     }
 
-    saveTodo(todoToSave) {
-        let i = this.storage.todos.findIndex(todo => todo.id === todoToSave.id);
-        if (i < 0) {
-            // If the item was not found (i.e. i === -1) we should treat it as a new item to save
-            this.storage.todos.push(todoToSave);
+    /**
+     * @param {*} todoToSave 
+     * @returns a promise that will resolve to {payload: <saved object> }
+     */
+    async saveTodo(todoToSave) {
+        // If the TodoItem has an id set, then assume this should be an update operation.
+        // If no id is set yet, then assume this should create a new item.
+        let httpMethod = undefined;
+        let url = undefined;
+        if (todoToSave._id === undefined) {
+            httpMethod = "POST";
+            url = "/api/todos";
         }
         else {
-            let todoInStorage = this.storage.todos[i];
-            let updatedTodo = {...todoInStorage, ...todoToSave};
-            this.storage.todos[i] = updatedTodo;
+            httpMethod = "PUT";
+            url = `/api/todos/${todoToSave._id}`;
         }
+
+        let promise = await this.httpService.ajax(httpMethod, url, todoToSave)
+            .then(function(data) {
+                return data.payload;
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+
+        return promise;
     }
 
     _sortTodos1(todos, sortOrder, compareFunction) {

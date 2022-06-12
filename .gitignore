@@ -1,3 +1,5 @@
+*.OLD
+
 # Don't store the DB file
 data/
 data/todos.db

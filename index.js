@@ -17,8 +17,8 @@ function methodOverrideFn(req, res) {
     }
 }
 
-app.use(todoRoutes);
-app.use(express.static('./public'));
+app.use(todoRoutes); // Equals all routes for REST API ("/api")
+app.use(express.static('./public')); // Equals route for static content ("/")
 
 const hostname = '127.0.0.1';
 const port = 3001;

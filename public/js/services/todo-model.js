@@ -44,8 +44,8 @@ class TodoItemFactory {
             isdone
         );
         
-        todo.id = TodoItemFactory.id === undefined ? TodoItemFactory.nextIdAndIncr() : TodoItemFactory.id;
-        todo.creationdate = TodoItemFactory.creationdate === undefined ? new Date().toISOString().split("T")[0] : TodoItemFactory.creationdate;
+        //todo.id = TodoItemFactory.id === undefined ? TodoItemFactory.nextIdAndIncr() : TodoItemFactory.id;
+        //todo.creationdate = TodoItemFactory.creationdate === undefined ? new Date().toISOString().split("T")[0] : TodoItemFactory.creationdate;
 
         // Unset factory state
         TodoItemFactory.id = undefined;

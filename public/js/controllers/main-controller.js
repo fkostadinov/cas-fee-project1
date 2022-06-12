@@ -1,7 +1,7 @@
 /* ------------------ TodoService -------------------- */
 
 const todoService = new TodoService();
-todoService.loadMockData();
+//todoService.loadMockData();
 
 /* ------------------ Rendering -------------------- */
 
@@ -15,11 +15,11 @@ class Renderer {
                 <div class="todo-item-importance">${todoItem.importance}</div>
                 <div class="todo-item-description">${todoItem.description}</div>
                 <div class="todo-item-isdone">
-                    <input type="checkbox" id="todo-item-isdone-${todoItem.id}" ${todoItem.isdone ? "checked" : ""} disabled>
-                    <label class="todo-item-checkbox-lbl" for="todo-item-isdone-${todoItem.id}">Completed</label>
+                    <input type="checkbox" id="todo-item-isdone-${todoItem._id}" ${todoItem.isdone ? "checked" : ""} disabled>
+                    <label class="todo-item-checkbox-lbl" for="todo-item-isdone-${todoItem._id}">Completed</label>
                 </div>
                 <div class="todo-item-btn">
-                    <button class="btn" data-todo-item-id="${todoItem.id}">Edit</button>
+                    <button class="btn" data-todo-item-id="${todoItem._id}">Edit</button>
                 </div>
             </div>
             <hr>
@@ -35,8 +35,9 @@ class Renderer {
         document.querySelector("#todos").innerHTML = todosHtml;
     }
 
-    renderTodos() {
-        let todosHtml = this.createTodosHtml(todoService.getAllTodos());
+    async renderTodos() {
+        let allTodoItems = await todoService.getAllTodos();
+        let todosHtml = this.createTodosHtml(allTodoItems);
         this.renderTodosWithHtml(todosHtml);
     }
 
@@ -101,6 +102,7 @@ class EditTodoController {
         this.currentTodoItem = undefined;
     }
 
+    /*
     saveTodo() {
         let inputTitleEl = document.querySelector("#todo-input-title");
         let inputImportanceEl = document.querySelector("#todo-input-importance");
@@ -124,13 +126,34 @@ class EditTodoController {
         this.currentTodoItem = {...this.currentTodoItem, ...todoToSave};
         this.todoService.saveTodo(this.currentTodoItem);
     }
+    */
+    
+    async saveTodo() {
+        let inputTitleEl = document.querySelector("#todo-input-title");
+        let inputImportanceEl = document.querySelector("#todo-input-importance");
+        let inputDuedateEl = document.querySelector("#todo-input-duedate");
+        let inputIsDoneEl = document.querySelector("#todo-form-isdone");
+        let inputDescriptionEl = document.querySelector("#todo-input-description");
 
-    handleEditButtonClick(event) {
+        let todoToSave = TodoItemFactory.createTodoItem(
+            inputTitleEl.value,
+            inputDescriptionEl.value,
+            inputImportanceEl.value,
+            inputDuedateEl.value,
+            inputIsDoneEl.checked);
+
+        this.currentTodoItem = {...this.currentTodoItem, ...todoToSave};
+        this.currentTodoItem = await this.todoService.saveTodo(this.currentTodoItem);
+    }
+
+    async handleEditButtonClick(event) {
         // Ignore events that are not coming from edit button clicks (e.g.
         // clicks on checkbox labels)
         if (event.target.matches("button[data-todo-item-id]")) {
-            let todoItemId = Number(event.target.dataset.todoItemId);
-            this.currentTodoItem = todoService.findTodoById(todoItemId);
+            //let todoItemId = Number(event.target.dataset.todoItemId);
+
+            let todoItemId = event.target.dataset.todoItemId;
+            this.currentTodoItem = await todoService.findTodoById(todoItemId);
 
             document.querySelector("#todo-input-title").value = this.currentTodoItem.title;
             document.querySelector("#todo-input-importance").value = this.currentTodoItem.importance;
@@ -146,7 +169,7 @@ class EditTodoController {
         }
     }
 
-    handleSaveOrCancelClick(event) {
+    async handleSaveOrCancelClick(event) {
         // We're inside the form tag, so prevent default form submission.
         event.preventDefault();
 
@@ -163,7 +186,7 @@ class EditTodoController {
                 {
                     this.saveTodo();
                     this.currentTodoItem = undefined;
-                    let todosHtml = this.renderer.createTodosHtml(this.todoService.getAllTodos());
+                    let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
                     this.renderer.renderTodosWithHtml(todosHtml);
                     document.querySelector("#btn-create-todo").style.visibility = "visible";
                     document.querySelector("#todo-form-container").style.display = "none";
@@ -174,7 +197,7 @@ class EditTodoController {
             case "btn-cancel-todo":
                 {
                     this.currentTodoItem = undefined;
-                    let todosHtml = this.renderer.createTodosHtml(this.todoService.getAllTodos());
+                    let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
                     this.renderer.renderTodosWithHtml(todosHtml);
                     document.querySelector("#btn-create-todo").style.visibility = "visible";
                     document.querySelector("#todo-form-container").style.display = "none";
@@ -206,10 +229,10 @@ class FilterTodoController {
     }
 
     // Event handler for filter button
-    handleFilterButtonClick(event) {
+    async handleFilterButtonClick(event) {
         // Toggle filter activity state
         this.isActive = !this.isActive;
-        let filteredTodos = this.todoService.getAllTodos();
+        let filteredTodos = await this.todoService.getAllTodos();
         if (this.isActive) {
             filteredTodos = this.todoService.getFilteredTodos(todo => todo.isdone === false);
         }
@@ -237,7 +260,7 @@ class SortTodoController {
     }
 
     // Event handler for sorting buttons
-    handleSortButtonClick(event) {
+    async handleSortButtonClick(event) {
         const button = event.target;
 
         // If previous sorter is same as new one, just toggle the sort order
@@ -249,7 +272,7 @@ class SortTodoController {
 
         let ts = this.filterController.isActive ?
             this.todoService.getFilteredTodos(todo => todo.isdone === false) :
-            this.todoService.getAllTodos();
+            await this.todoService.getAllTodos(); // TODO: This is not very nice, probably we should not load everything again from the server...
 
         let sortOrder = this.isAscending ? "ascending" : "descending";
         let sortedTodos = undefined;
