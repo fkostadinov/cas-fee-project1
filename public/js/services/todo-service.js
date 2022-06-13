@@ -22,19 +22,6 @@ class TodoService {
         return promise;
     }
 
-    /*
-    getFilteredTodos(filterFunction) {
-        return this.storage.todos.filter(filterFunction);
-    }
-    */
-    /*
-    getFilteredTodos(filterFunction) {
-        //let allTodos = await this.getAllTodos();
-        //return allTodos.filter(filterFunction);
-        return this.getAllTodos();
-    }
-    */
-
     /**
      * Note: The given todo id must be of type 'number' (not string or Number!)
      * @returns a promise that will resolve to {payload: <actual object> }
@@ -126,32 +113,28 @@ class TodoService {
      * If param todos is omitted, then this function is applied to all available todos
      */
     getTodosSortedByTitle(sortOrder, todos) {
-        let ts = todos || this.storage.todos;
-        return this._sortTodos1(ts, sortOrder, this._compareTodosByTitle);
+         return this._sortTodos1(todos, sortOrder, this._compareTodosByTitle);
     }
     
     /*
      * If param todos is omitted, then this function is applied to all available todos
      */
     getTodosSortedByDueDate(sortOrder, todos) {
-        let ts = todos || this.storage.todos;
-        return this._sortTodos1(ts, sortOrder, this._compareTodosByDueDate);
+        return this._sortTodos1(todos, sortOrder, this._compareTodosByDueDate);
     }
 
     /*
      * If param todos is omitted, then this function is applied to all available todos
      */
     getTodosSortedByCreationDate(sortOrder, todos) {
-        let ts = todos || this.storage.todos;
-        return this._sortTodos1(ts, sortOrder, this._compareTodosByCreationDate);
+        return this._sortTodos1(todos, sortOrder, this._compareTodosByCreationDate);
     }
 
     /*
      * If param todos is omitted, then this function is applied to all available todos
      */
     getTodosSortedByImportance(sortOrder, todos) {
-        let ts = todos || this.storage.todos;
-        return this._sortTodos1(ts, sortOrder, this._compareTodosByImportance);
+        return this._sortTodos1(todos, sortOrder, this._compareTodosByImportance);
     }
 
 }

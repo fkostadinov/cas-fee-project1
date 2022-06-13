@@ -47,9 +47,13 @@ class TodoStore {
         // TODO:
         // Should we check whether an ID was set and throw an error if already set?
 
-        if (todoItem.creationDate === undefined) {
+        if (!todoItem.hasOwnProperty("creationDate") || todoItem.creationDate === undefined) {
             todoItem.creationDate = new Date().toISOString().split("T")[0];
         }
+
+        //if (todoItem.creationDate === undefined) {
+        //    todoItem.creationDate = new Date().toISOString().split("T")[0];
+        //}
 
         // TODO: Should we check whether all fields of the todoItem have been set?
 

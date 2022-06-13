@@ -236,7 +236,6 @@ class FilterTodoController {
         if (this.isActive) {
             filteredTodos = filteredTodos.filter(todo => todo.isdone === false);
         }
-        console.log(filteredTodos);
         let todosHtml = this.renderer.createTodosHtml(filteredTodos);
         this.renderer.renderTodosWithHtml(todosHtml);
     }
@@ -271,9 +270,10 @@ class SortTodoController {
 
         this.activeSorter = button;
 
-        let ts = this.filterController.isActive ?
-            this.todoService.getFilteredTodos(todo => todo.isdone === false) :
-            await this.todoService.getAllTodos(); // TODO: This is not very nice, probably we should not load everything again from the server...
+        let ts = await this.todoService.getAllTodos();
+        if (this.filterController.isActive) {
+            ts = ts.filter(todo => todo.isdone === false);
+        }
 
         let sortOrder = this.isAscending ? "ascending" : "descending";
         let sortedTodos = undefined;
