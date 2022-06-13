@@ -8,7 +8,7 @@ class TodoService {
     }
 
     /**
-     * @returns a promise that will resolve to {payload: [ <actual data> ]}
+     * @returns a promise that will resolve to an array of TodoItems
      */
     async getAllTodos() {
         let promise = await this.httpService.ajax("GET", "/api/todos", undefined)
@@ -22,9 +22,18 @@ class TodoService {
         return promise;
     }
 
+    /*
     getFilteredTodos(filterFunction) {
         return this.storage.todos.filter(filterFunction);
     }
+    */
+    /*
+    getFilteredTodos(filterFunction) {
+        //let allTodos = await this.getAllTodos();
+        //return allTodos.filter(filterFunction);
+        return this.getAllTodos();
+    }
+    */
 
     /**
      * Note: The given todo id must be of type 'number' (not string or Number!)

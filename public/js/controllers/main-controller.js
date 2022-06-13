@@ -234,8 +234,9 @@ class FilterTodoController {
         this.isActive = !this.isActive;
         let filteredTodos = await this.todoService.getAllTodos();
         if (this.isActive) {
-            filteredTodos = this.todoService.getFilteredTodos(todo => todo.isdone === false);
+            filteredTodos = filteredTodos.filter(todo => todo.isdone === false);
         }
+        console.log(filteredTodos);
         let todosHtml = this.renderer.createTodosHtml(filteredTodos);
         this.renderer.renderTodosWithHtml(todosHtml);
     }
