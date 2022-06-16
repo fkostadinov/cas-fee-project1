@@ -58,9 +58,10 @@ body > .base-container {
 
 .todo-list-item-container {
     display: grid;
-    grid-template-columns: 20% 60% 10% 10%;
+    grid-template-columns: 20% 55% 15% 10%;
 }
 
+/* ----- A single todo item in the list ------ */
 .todo-item-due-date {
     grid-column: 1;
     grid-row: 1;
@@ -74,6 +75,11 @@ body > .base-container {
 .todo-item-importance {
     grid-column: 3;
     grid-row: 1;
+}
+
+.todo-item-creationdate {
+    grid-column: 3;
+    grid-row: 2;
 }
 
 .todo-item-isdone {

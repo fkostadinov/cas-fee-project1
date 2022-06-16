@@ -13,6 +13,7 @@ class Renderer {
                 <div class="todo-item-due-date">Due by: ${todoItem.duedate}</div>
                 <div class="todo-item-title">${todoItem.title}</div>
                 <div class="todo-item-importance">${todoItem.importance}</div>
+                <div class="todo-item-creationdate">Created: ${new Date(todoItem.creationdate).toISOString().slice(0, 16).replace("T", " ")}</div>
                 <div class="todo-item-description">${todoItem.description}</div>
                 <div class="todo-item-isdone">
                     <input type="checkbox" id="todo-item-isdone-${todoItem._id}" ${todoItem.isdone ? "checked" : ""} disabled>
