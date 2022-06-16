@@ -67,7 +67,7 @@ class TodoService {
         return promise;
     }
 
-    _sortTodos1(todos, sortOrder, compareFunction) {
+    _sortTodos(todos, sortOrder, compareFunction) {
         return [...todos].sort(compareFunction(sortOrder));
     }
 
@@ -113,28 +113,28 @@ class TodoService {
      * If param todos is omitted, then this function is applied to all available todos
      */
     getTodosSortedByTitle(sortOrder, todos) {
-         return this._sortTodos1(todos, sortOrder, this._compareTodosByTitle);
+         return this._sortTodos(todos, sortOrder, this._compareTodosByTitle);
     }
     
     /*
      * If param todos is omitted, then this function is applied to all available todos
      */
     getTodosSortedByDueDate(sortOrder, todos) {
-        return this._sortTodos1(todos, sortOrder, this._compareTodosByDueDate);
+        return this._sortTodos(todos, sortOrder, this._compareTodosByDueDate);
     }
 
     /*
      * If param todos is omitted, then this function is applied to all available todos
      */
     getTodosSortedByCreationDate(sortOrder, todos) {
-        return this._sortTodos1(todos, sortOrder, this._compareTodosByCreationDate);
+        return this._sortTodos(todos, sortOrder, this._compareTodosByCreationDate);
     }
 
     /*
      * If param todos is omitted, then this function is applied to all available todos
      */
     getTodosSortedByImportance(sortOrder, todos) {
-        return this._sortTodos1(todos, sortOrder, this._compareTodosByImportance);
+        return this._sortTodos(todos, sortOrder, this._compareTodosByImportance);
     }
 
 }

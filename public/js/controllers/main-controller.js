@@ -71,6 +71,10 @@ class ToggleStyleController {
 const toggleStyleController = new ToggleStyleController();
 
 
+/* ------------------ Toggle visibility of edit mode and overview mode -------------------- */
+
+var currentTodoItem = undefined;
+
 class VisibilityModeController {
 
     showEditMode() {
@@ -81,13 +85,12 @@ class VisibilityModeController {
     }
 
     showOverviewMode() {
-        document.querySelector("#btn-create-todo").style.visibility = "visible";
-        document.querySelector("#todo-form-container").style.display = "none";
-        document.querySelector("#todo-list-container").style.display = "block";        
+        document.querySelector("#btn-create-todo").style.visibility = "visible";  
+        document.querySelector("#todo-form-container").style.display = "none";  
+        document.querySelector("#todo-list-container").style.display = "block";    
     }
 }
 const visibilityModeController = new VisibilityModeController();
-
 
 /* ------------------ Creating & Updating -------------------- */
 
@@ -118,7 +121,6 @@ class EditTodoController {
         this.visibilityModeController = visibilityModeController;
         this.todoService = todoService;
         this.renderer = renderer;
-        this.currentTodoItem = undefined;
     }
     
     async saveTodo() {
@@ -135,8 +137,15 @@ class EditTodoController {
             inputDuedateEl.value,
             inputIsDoneEl.checked);
 
-        this.currentTodoItem = {...this.currentTodoItem, ...todoToSave};
-        this.currentTodoItem = await this.todoService.saveTodo(this.currentTodoItem);
+        if (currentTodoItem === undefined) {
+            currentTodoItem = {};
+        }
+        currentTodoItem.title = todoToSave.title;
+        currentTodoItem.description = todoToSave.description;
+        currentTodoItem.importance = todoToSave.importance;
+        currentTodoItem.duedate = todoToSave.duedate;
+        currentTodoItem.isdone = todoToSave.isdone;
+        currentTodoItem = await this.todoService.saveTodo(currentTodoItem);
     }
 
     async handleEditButtonClick(event) {
@@ -144,13 +153,13 @@ class EditTodoController {
         // clicks on checkbox labels)
         if (event.target.matches("button[data-todo-item-id]")) {
             let todoItemId = event.target.dataset.todoItemId;
-            this.currentTodoItem = await todoService.findTodoById(todoItemId);
 
-            document.querySelector("#todo-input-title").value = this.currentTodoItem.title;
-            document.querySelector("#todo-input-importance").value = this.currentTodoItem.importance;
-            document.querySelector("#todo-form-isdone").checked = this.currentTodoItem.isdone;
-            document.querySelector("#todo-input-duedate").value = this.currentTodoItem.duedate;
-            document.querySelector("#todo-input-description").value = this.currentTodoItem.description;
+            currentTodoItem = await todoService.findTodoById(todoItemId);
+            document.querySelector("#todo-input-title").value = currentTodoItem.title;
+            document.querySelector("#todo-input-importance").value = currentTodoItem.importance;
+            document.querySelector("#todo-form-isdone").checked = currentTodoItem.isdone;
+            document.querySelector("#todo-input-duedate").value = currentTodoItem.duedate;
+            document.querySelector("#todo-input-description").value = currentTodoItem.description;
 
             visibilityModeController.showEditMode();
         }
@@ -172,7 +181,7 @@ class EditTodoController {
             case "btn-save-todo-and-overview":
                 {
                     this.saveTodo();
-                    this.currentTodoItem = undefined;
+                    currentTodoItem = undefined;
                     let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
                     this.renderer.renderTodosWithHtml(todosHtml);
                     visibilityModeController.showOverviewMode();
@@ -181,7 +190,7 @@ class EditTodoController {
 
             case "btn-cancel-todo":
                 {
-                    this.currentTodoItem = undefined;
+                    currentTodoItem = undefined;
                     let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
                     this.renderer.renderTodosWithHtml(todosHtml);
                     visibilityModeController.showOverviewMode();
