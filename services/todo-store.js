@@ -45,6 +45,8 @@ class TodoStore {
      */
     add(todoItem, callback) {
         console.log("TodoStore.add - start");
+
+        console.log("New TodoItem to store: ", todoItem);
         
         if (todoItem.hasOwnProperty("_id") && todoItem._id !== undefined) {
             console.log("Warning: Trying to add a TodoItem with the ID field already set will overwrite "
@@ -55,21 +57,15 @@ class TodoStore {
             todoItem.creationDate = new Date().toISOString().split("T")[0];
         }
 
-        //if (todoItem.creationDate === undefined) {
-        //    todoItem.creationDate = new Date().toISOString().split("T")[0];
-        //}
-
         // TODO: Should we check whether all fields of the todoItem have been set?
 
         db.insert(todoItem, function(err, newTodoItem) {
-        console.log("TodoStore.insert - start");
-
-        console.log("Inserting: ", todoItem);
-
-            if (callback) {
-                callback(err, {payload: newTodoItem});
-            }
-        });
+            console.log("TodoStore.insert - start");
+            console.log("Inserting: ", todoItem);
+                if (callback) {
+                    callback(err, {payload: newTodoItem});
+                }
+            });
         console.log("TodoStore.insert - end")
     }
 
@@ -86,7 +82,8 @@ class TodoStore {
 
         db.update(
             {_id: todoItem._id},
-            {title: todoItem.title, description: todoItem.description, importance: todoItem.importance, isdone: todoItem.isdone, duedate: todoItem.duedate},
+            //{title: todoItem.title, description: todoItem.description, importance: todoItem.importance, isdone: todoItem.isdone, duedate: todoItem.duedate},
+            {$set: {title: todoItem.title, description: todoItem.description, importance: todoItem.importance, isdone: todoItem.isdone, duedate: todoItem.duedate}},
             {returnUpdatedDocs: true},
             function(err, numTodoItems, updatedTodoItem) {
             if (callback) {

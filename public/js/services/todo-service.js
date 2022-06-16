@@ -2,8 +2,6 @@
 
 class TodoService {
     constructor(storage) {
-        this.storage = storage || new TodoStorage();
-
         this.httpService = new HttpService();
     }
 

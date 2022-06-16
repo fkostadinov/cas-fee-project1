@@ -106,6 +106,7 @@ class CreateTodoController {
         document.querySelector("#todo-input-duedate").value = new Date().toISOString().split("T")[0];
         document.querySelector("#todo-input-description").value = "";
 
+        currentTodoItem = undefined;
         visibilityModeController.showEditMode();
     }
 
