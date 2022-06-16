@@ -19,7 +19,8 @@ class Renderer {
                     <label class="todo-item-checkbox-lbl" for="todo-item-isdone-${todoItem._id}">Completed</label>
                 </div>
                 <div class="todo-item-btn">
-                    <button class="btn" data-todo-item-id="${todoItem._id}">Edit</button>
+                    <button class="btn btn-edit" data-todo-item-id="${todoItem._id}">Edit</button>
+                    <button class="btn btn-delete" data-todo-item-id="${todoItem._id}">Delete</button>
                 </div>
             </div>
             <hr>
@@ -149,10 +150,10 @@ class EditTodoController {
         currentTodoItem = await this.todoService.saveTodo(currentTodoItem);
     }
 
-    async handleEditButtonClick(event) {
+    async handleEditOrDeleteButtonClick(event) {
         // Ignore events that are not coming from edit button clicks (e.g.
         // clicks on checkbox labels)
-        if (event.target.matches("button[data-todo-item-id]")) {
+        if (event.target.matches("button[class~='btn-edit']")) {
             let todoItemId = event.target.dataset.todoItemId;
 
             currentTodoItem = await todoService.findTodoById(todoItemId);
@@ -163,6 +164,16 @@ class EditTodoController {
             document.querySelector("#todo-input-description").value = currentTodoItem.description;
 
             visibilityModeController.showEditMode();
+        }
+        else if (event.target.matches("button[class~='btn-delete']")) {
+            let todoItemId = event.target.dataset.todoItemId;
+            let numDeletedTodos = await todoService.deleteTodoById(todoItemId);
+            if (numDeletedTodos === 0) {
+                console.error(`Failed to delete TodoItem with id ${todoItemId}`);
+            }
+            currentTodoItem = undefined;
+            let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
+            this.renderer.renderTodosWithHtml(todosHtml);
         }
     }
 
@@ -201,7 +212,9 @@ class EditTodoController {
     }
 
     attachEditButtonEventHandlers() {
-        document.querySelector("#todos").addEventListener("click", this.handleEditButtonClick.bind(this));
+        // TODO: Attaching an event listener to the element with #todos ID is maybe not the best approach -
+        // perhaps we should rather attach the listeners somehow dynamically to the buttons themselves?
+        document.querySelector("#todos").addEventListener("click", this.handleEditOrDeleteButtonClick.bind(this));
         document.querySelector("#btn-save-todo").addEventListener("click", this.handleSaveOrCancelClick.bind(this));
         document.querySelector("#btn-save-todo-and-overview").addEventListener("click", this.handleSaveOrCancelClick.bind(this));
         document.querySelector("#btn-cancel-todo").addEventListener("click", this.handleSaveOrCancelClick.bind(this));

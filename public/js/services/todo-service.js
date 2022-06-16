@@ -21,7 +21,7 @@ class TodoService {
     }
 
     /**
-     * Note: The given todo id must be of type 'number' (not string or Number!)
+     * Retrieves a TodoItem by its ID from the server
      * @returns a promise that will resolve to {payload: <actual object> }
      */
     async findTodoById(todoId) {
@@ -33,6 +33,24 @@ class TodoService {
             console.error(error);
         });
 
+        return promise;
+    }
+
+    /**
+     * Deletes a TodoItem by its ID
+     * @param {*} todoId 
+     * @returns a promise that will resolve to {payload: <number od deleted objects> }, where <number
+     * of deleted objects> will be 1 if deletion was successful, or 0 if deletion failed
+     */
+    async deleteTodoById(todoId) {
+        let promise = await this.httpService.ajax("DELETE", `/api/todos/${todoId}`, undefined)
+        .then(function(data) {
+            return data.payload;
+        })
+        .catch(function(error) {
+            console.error(error);
+        })
+        
         return promise;
     }
 
