@@ -71,62 +71,55 @@ class ToggleStyleController {
 const toggleStyleController = new ToggleStyleController();
 
 
+class VisibilityModeController {
+
+    showEditMode() {
+        document.querySelector("#btn-create-todo").style.visibility = "hidden";
+        document.querySelector("#todo-list-container").style.display = "none";
+        // Be aware that the todo-list-form element must use display "flex", not "block"
+        document.querySelector("#todo-form-container").style.display = "flex";        
+    }
+
+    showOverviewMode() {
+        document.querySelector("#btn-create-todo").style.visibility = "visible";
+        document.querySelector("#todo-form-container").style.display = "none";
+        document.querySelector("#todo-list-container").style.display = "block";        
+    }
+}
+const visibilityModeController = new VisibilityModeController();
+
+
 /* ------------------ Creating & Updating -------------------- */
 
 class CreateTodoController {
+    constructor(visibilityModeController) {
+        this.visibilityModeController = visibilityModeController;
+    }
+
     handleCreateButtonClick(event) {
         document.querySelector("#todo-input-title").value = "";
         document.querySelector("#todo-input-importance").value = 1;
         document.querySelector("#todo-form-isdone").checked = false;
-        document.querySelector("#todo-input-duedate").value = "1970-01-01";
+        document.querySelector("#todo-input-duedate").value = new Date().toISOString().split("T")[0];
         document.querySelector("#todo-input-description").value = "";
 
-        document.querySelector("#btn-create-todo").style.visibility = "hidden";
-        document.querySelector("#todo-list-container").style.display = "none";
-
-        // Be aware that the todo-list-form element must use display "flex", not "block"
-        document.querySelector("#todo-form-container").style.display = "flex";
+        visibilityModeController.showEditMode();
     }
 
     attachCreateButtonEventHandlers() {
         document.querySelector("#btn-create-todo").addEventListener("click", this.handleCreateButtonClick.bind(this));
     }
 }
-const createController = new CreateTodoController();
+const createController = new CreateTodoController(visibilityModeController);
 
 
 class EditTodoController {
-    constructor(todoService, renderer) {
+    constructor(visibilityModeController, todoService, renderer) {
+        this.visibilityModeController = visibilityModeController;
         this.todoService = todoService;
         this.renderer = renderer;
         this.currentTodoItem = undefined;
     }
-
-    /*
-    saveTodo() {
-        let inputTitleEl = document.querySelector("#todo-input-title");
-        let inputImportanceEl = document.querySelector("#todo-input-importance");
-        let inputDuedateEl = document.querySelector("#todo-input-duedate");
-        let inputIsDoneEl = document.querySelector("#todo-form-isdone");
-        let inputDescriptionEl = document.querySelector("#todo-input-description");
-
-        // If user is creating a completely new item, then currentTodoItem does not
-        // exist. Only if a user is editing an existing todo item these values are set.
-        if (!(this.currentTodoItem === undefined)) {
-            TodoItemFactory.setId(this.currentTodoItem.id);
-            TodoItemFactory.setCreationdate(this.currentTodoItem.creationdate);
-        }
-        let todoToSave = TodoItemFactory.createTodoItem(
-            inputTitleEl.value,
-            inputDescriptionEl.value,
-            inputImportanceEl.value,
-            inputDuedateEl.value,
-            inputIsDoneEl.checked);
-
-        this.currentTodoItem = {...this.currentTodoItem, ...todoToSave};
-        this.todoService.saveTodo(this.currentTodoItem);
-    }
-    */
     
     async saveTodo() {
         let inputTitleEl = document.querySelector("#todo-input-title");
@@ -150,8 +143,6 @@ class EditTodoController {
         // Ignore events that are not coming from edit button clicks (e.g.
         // clicks on checkbox labels)
         if (event.target.matches("button[data-todo-item-id]")) {
-            //let todoItemId = Number(event.target.dataset.todoItemId);
-
             let todoItemId = event.target.dataset.todoItemId;
             this.currentTodoItem = await todoService.findTodoById(todoItemId);
 
@@ -161,11 +152,7 @@ class EditTodoController {
             document.querySelector("#todo-input-duedate").value = this.currentTodoItem.duedate;
             document.querySelector("#todo-input-description").value = this.currentTodoItem.description;
 
-            document.querySelector("#btn-create-todo").style.visibility = "hidden";
-            document.querySelector("#todo-list-container").style.display = "none";
-
-            // Be aware that the todo-list-form element must use display "flex", not "block"
-            document.querySelector("#todo-form-container").style.display = "flex";
+            visibilityModeController.showEditMode();
         }
     }
 
@@ -188,9 +175,7 @@ class EditTodoController {
                     this.currentTodoItem = undefined;
                     let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
                     this.renderer.renderTodosWithHtml(todosHtml);
-                    document.querySelector("#btn-create-todo").style.visibility = "visible";
-                    document.querySelector("#todo-form-container").style.display = "none";
-                    document.querySelector("#todo-list-container").style.display = "block";
+                    visibilityModeController.showOverviewMode();
                 }
                 break;
 
@@ -199,9 +184,7 @@ class EditTodoController {
                     this.currentTodoItem = undefined;
                     let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
                     this.renderer.renderTodosWithHtml(todosHtml);
-                    document.querySelector("#btn-create-todo").style.visibility = "visible";
-                    document.querySelector("#todo-form-container").style.display = "none";
-                    document.querySelector("#todo-list-container").style.display = "block";
+                    visibilityModeController.showOverviewMode();
                 }
                 break;
         }
@@ -214,7 +197,7 @@ class EditTodoController {
         document.querySelector("#btn-cancel-todo").addEventListener("click", this.handleSaveOrCancelClick.bind(this));
     }
 }
-const editTodoController = new EditTodoController(todoService, renderer);
+const editTodoController = new EditTodoController(visibilityModeController, todoService, renderer);
 
 
 

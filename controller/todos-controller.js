@@ -6,6 +6,8 @@ export function showAllTodos(req, res) {
         console.log("TodosController.all.callback - start");
         if (err) {
             console.error(err);
+            // TODO: Should probably set error status code and send back
+            // corresponding response to client?
         }
         else {
             res.json(todoItems);
@@ -22,6 +24,8 @@ export function createTodo(req, res) {
         console.log("TodosController.add.callback - start");
         if (err) {
             console.error(err);
+            // TODO: Should probably set error status code and send back
+            // corresponding response to client?
         }
         else {
             res.json(todoItem);
@@ -38,6 +42,8 @@ export function showTodo(req, res) {
         console.log("TodosController.get.callback - start");
         if (err) {
             console.error(err);
+            // TODO: Should probably set error status code and send back
+            // corresponding response to client?
         }
         else {
             res.json(todoItem);
@@ -54,6 +60,8 @@ export function updateTodo(req, res) {
         console.log("TodosController.update.callback - start");
         if (err) {
             console.error(err);
+            // TODO: Should probably set error status code and send back
+            // corresponding response to client?
         }
         else {
             res.json(todoItem);
@@ -65,12 +73,17 @@ export function updateTodo(req, res) {
 };
 
 export function deleteTodo(req, res) {
-    res.status(501);
-    res.type('text/html');
-    res.write("<html>");
-    res.write("<head></head>");
-    res.write("<body>")
-    res.write("<p><strong>This method is not implemented yet!</strong></p>");
-    res.write("</body>")
-    res.end("</html>");
+    console.log("TodosController.deleteTodo - start");
+    todoStore.delete(req.params.id, function(err, deletedTodoItem) {
+        console.log("TodoController.delete.callback - start")
+        if (err) {
+            console.error(err);
+            // TODO: Should probably set error status code and send back
+            // corresponding response to client?
+        }
+        else {
+            res.json(deletedTodoItem);
+        }
+        console.log("TodoController.delete.callback - end");
+    });
 };

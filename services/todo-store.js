@@ -22,8 +22,9 @@ class TodoStore {
     }
 
     /**
-     * Returns a todo item from the db with a given id. If no such item exists,
-     * then TODO??? Not sure if error function is thrown or an empty object is returned.
+     * Returns a todo item from the db with a given id. The method returns a promise that will
+     * resolve to an object {payload: <TodoItem> }. If no such item exists,
+     * then ???
      * @param {*} id the TodoItem's db id
      * @param {*} callback 
      */
@@ -36,7 +37,8 @@ class TodoStore {
     }
 
     /**
-     * Add a new TodoItem into the db.
+     * Add a new TodoItem into the db. The method will return a promise resolving to an object
+     * {payload: <Newly created TodoItem> }. Note that the returned TodoItem will contain the DB's ID.
      * TODO: What should the behaviour be if the given ID already exists?
      * @param {*} todoItem the new TodoItem to be stored
      * @param {*} callback ???
@@ -44,8 +46,10 @@ class TodoStore {
     add(todoItem, callback) {
         console.log("TodoStore.add - start");
         
-        // TODO:
-        // Should we check whether an ID was set and throw an error if already set?
+        if (todoItem.hasOwnProperty("_id") && todoItem._id !== undefined) {
+            console.log("Warning: Trying to add a TodoItem with the ID field already set will overwrite "
+                + " the provided ID with a new one from the database.");
+        }
 
         if (!todoItem.hasOwnProperty("creationDate") || todoItem.creationDate === undefined) {
             todoItem.creationDate = new Date().toISOString().split("T")[0];
@@ -58,20 +62,28 @@ class TodoStore {
         // TODO: Should we check whether all fields of the todoItem have been set?
 
         db.insert(todoItem, function(err, newTodoItem) {
+        console.log("TodoStore.insert - start");
+
+        console.log("Inserting: ", todoItem);
+
             if (callback) {
                 callback(err, {payload: newTodoItem});
             }
         });
-        console.log("TodoStore.add - end")
+        console.log("TodoStore.insert - end")
     }
 
     /**
-     * Update an existing TodoItem in the db with new values.
+     * Update an existing TodoItem in the db with new values. The method returns a promise that will
+     * resolve to an object {payload: <Updated TodoItem> }.
      * @param {*} todoItem the todo item containing updated data that should overwrite the existing todo item in the db
      * @param {*} callback ???
      */
     update(todoItem, callback) {
         console.log("TodoStore.update - start");
+
+        console.log("Updating: ", todoItem);
+
         db.update(
             {_id: todoItem._id},
             {title: todoItem.title, description: todoItem.description, importance: todoItem.importance, isdone: todoItem.isdone, duedate: todoItem.duedate},
@@ -86,7 +98,8 @@ class TodoStore {
     }
 
     /**
-     * Return all TodoItems stored in the db
+     * Return all TodoItems stored in the db. The method returns a promise that will resolve
+     * to an object {payload: [<TodoItem 1>, <TodoItem 2>, ...]}.
      * @param {*} callback ???
      */
     all(callback) {
@@ -95,6 +108,23 @@ class TodoStore {
             callback(err, {payload: todoItems});
         });
         console.log("TodoStore.all - end")
+    }
+
+    /**
+     * Delete a TodoItem stored in the db. The method returns a promise that will resolve to
+     * an object {payload: <number of deleted TodoItems> }, where <number of deleted TodoItems>
+     * will always be 1 for successful deletes, or 0 for failed deletes.
+     * @param {*} id 
+     * @param {*} callback 
+     */
+    delete(id, callback) {
+        console.log("TodoStore.delete - start");
+
+        db.remove({_id: id}, {}, function(err, deletedTodoItem) {
+            callback(err, {payload: deletedTodoItem});
+        });
+
+        console.log("TodoStore.delete - end");
     }
 
 }
