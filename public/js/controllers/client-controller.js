@@ -10,7 +10,7 @@ class Renderer {
         return `
             <li class="todo-list-item">
             <div class="todo-list-item-container">
-                <div class="todo-item-due-date">${todoItem.duedate}</div>
+                <div class="todo-item-due-date">Due by: ${todoItem.duedate}</div>
                 <div class="todo-item-title">${todoItem.title}</div>
                 <div class="todo-item-importance">${todoItem.importance}</div>
                 <div class="todo-item-description">${todoItem.description}</div>

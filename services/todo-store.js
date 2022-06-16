@@ -53,8 +53,9 @@ class TodoStore {
                 + " the provided ID with a new one from the database.");
         }
 
-        if (!todoItem.hasOwnProperty("creationDate") || todoItem.creationDate === undefined) {
-            todoItem.creationDate = new Date().toISOString().split("T")[0];
+        if (!todoItem.hasOwnProperty("creationdate") || todoItem.creationdate === undefined) {
+            //todoItem.creationdate = new Date().toISOString().split("T")[0];
+            todoItem.creationdate = new Date().toISOString();
         }
 
         // TODO: Should we check whether all fields of the todoItem have been set?
