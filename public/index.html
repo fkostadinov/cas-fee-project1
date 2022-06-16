@@ -9,7 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
+    <link href="./assets/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="./assets/css/style.css" rel="stylesheet">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="./assets/favicon/site.webmanifest">
 
     <script src="./js/services/todo-model.js" defer></script>
     <script src="./js/services/http-service.js" defer></script>
@@ -35,10 +41,10 @@
                     <div class="todo-list-btns-container">
                         <div>
                             <!-- flex align left -->
-                            <button class="btn" id="btn-sort-by-title">By Title</button>
-                            <button class="btn" id="btn-sort-by-duedate">By Due Date</button>
-                            <button class="btn" id="btn-sort-by-creationdate">By Creation Date</button>
-                            <button class="btn" id="btn-sort-by-importance">By Importance</button>
+                            <button class="btn btn-sort" id="btn-sort-by-title">By Title <i class="fa fa-arrow-up"></i></button>
+                            <button class="btn btn-sort" id="btn-sort-by-duedate">By Due Date</button>
+                            <button class="btn btn-sort" id="btn-sort-by-creationdate">By Creation Date</button>
+                            <button class="btn btn-sort" id="btn-sort-by-importance">By Importance</button>
                         </div>
                         <div>
                             <!-- flex align right -->

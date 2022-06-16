@@ -303,8 +303,30 @@ class SortTodoController {
                 break;
         }
 
+        this.attachAriaSortAttribute(button.id, sortOrder);
+
         let todosHtml = this.renderer.createTodosHtml(sortedTodos);
         this.renderer.renderTodosWithHtml(todosHtml);
+    }
+
+    attachAriaSortAttribute(buttonId, sortOrder) {
+        let sortButtons = document.querySelectorAll("button[class~=btn-sort]");
+        sortButtons.forEach((button) => {
+            if (button.id === buttonId) {
+                button.setAttribute("aria-sort", sortOrder);
+                button.textContent = button.textContent + " ";
+                let el = document.createElement("i");
+                el.setAttribute("class", `fa ${sortOrder == 'ascending' ? 'fa-arrow-up' : 'fa-arrow-down'}`);
+                button.appendChild(el);
+            }
+            else {
+                button.removeAttribute("aria-sort");
+                let el = button.firstChild.nextSibling;
+                if (el) {
+                    button.removeChild(el);
+                }
+            }
+        });
     }
 
     attachSortButtonEventHandlers() {
@@ -313,6 +335,7 @@ class SortTodoController {
         document.querySelector("#btn-sort-by-creationdate").addEventListener("click", this.handleSortButtonClick.bind(this));
         document.querySelector("#btn-sort-by-importance").addEventListener("click", this.handleSortButtonClick.bind(this));
     }
+
 }
 const sorterController = new SortTodoController(todoService, renderer, filterController);
 
