@@ -1,9 +1,9 @@
 # Todo App von Fabian Kostadinov
 
-# How to start the application
+## How to start the application
 After cloning into your local Git repository, first install the required Node packages. Then you can use `npm start` command to start the ExpressJS server.
 
-## Client
+## Client-side code
 Client-side code can be found in folder /public.
 
 /public/assets: Contains CSS, Favicon and Font Awesome
@@ -13,7 +13,7 @@ Client-side code can be found in folder /public.
    \services: Contains services for communication with server plus some factory classes for creating model instances
 
 
-## Server
+## Server-side code
 Server-side code can be found everywhere other than /public folder.
    |
    \package.json & package-lock.json: Node files for 
