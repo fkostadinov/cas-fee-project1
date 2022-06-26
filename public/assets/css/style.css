@@ -19,6 +19,10 @@ body > .base-container {
     margin-right: 20px;
 }
 
+input:invalid {
+    border-color: red;
+}
+
 input[type=checkbox] {
     accent-color: var(--color-navy-blue);
 }

@@ -187,17 +187,29 @@ class EditTodoController {
         switch (button.id) {
             case "btn-save-todo":
                 {
-                    this.saveTodo();
+                    let isFormValid = document.querySelector("#todo-form-container").checkValidity();
+                    if (isFormValid) {
+                        this.saveTodo();
+                    }
+                    else {
+                        // Do nothing, invalid input fields are marked via CSS
+                    }
                 }
                 break;
 
             case "btn-save-todo-and-overview":
                 {
-                    this.saveTodo();
-                    currentTodoItem = undefined;
-                    let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
-                    this.renderer.renderTodosWithHtml(todosHtml);
-                    visibilityModeController.showOverviewMode();
+                    let isFormValid = document.querySelector("#todo-form-container").checkValidity();
+                    if (isFormValid) {
+                        this.saveTodo();
+                        currentTodoItem = undefined;
+                        let todosHtml = this.renderer.createTodosHtml(await this.todoService.getAllTodos());
+                        this.renderer.renderTodosWithHtml(todosHtml);
+                        visibilityModeController.showOverviewMode();
+                    }
+                    else {
+                        // Do nothing, invalid input fields are marked via CSS
+                    }
                 }
                 break;
 
