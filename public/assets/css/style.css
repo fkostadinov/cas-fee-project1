@@ -19,6 +19,14 @@ body > .base-container {
     margin-right: 20px;
 }
 
+input[type=checkbox] {
+    accent-color: var(--color-navy-blue);
+}
+
+input[type=checkbox][disabled] {
+    background-color: var(--color-navy-blue);
+}
+
 .btn {
     color: var(--color-near-white);
     background-color: var(--color-navy-blue);
@@ -100,7 +108,6 @@ body > .base-container {
 
 /* ----- Form of a single Todo ----- */
 #todo-form-container {
-    /*display: flex;*/
     display: none;
     flex-direction: column;
     flex-wrap: wrap;
