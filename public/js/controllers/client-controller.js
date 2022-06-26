@@ -1,7 +1,6 @@
 /* ------------------ TodoService -------------------- */
 
 const todoService = new TodoService();
-//todoService.loadMockData();
 
 /* ------------------ Rendering -------------------- */
 
